@@ -1,0 +1,586 @@
+/* Custom Styles for Portfolio */
+:root {
+    --primary-color: #3B82F6;
+    --primary-dark: #1E40AF;
+    --secondary-color: #64748B;
+    --accent-color: #F59E0B;
+    --background-light: #F8FAFC;
+    --text-dark: #1E293B;
+    --text-light: #64748B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+}
+
+.font-inter {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Navigation Styles */
+#navbar {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background-color: var(--primary-color);
+    border-radius: 1px;
+}
+
+/* Mobile Menu */
+.mobile-menu-button:focus {
+    outline: none;
+}
+
+.mobile-menu {
+    transition: all 0.3s ease;
+}
+
+/* Hero Section */
+#home {
+    background: linear-gradient(135deg, #1E3A8A 0%, #3730A3 50%, #1E40AF 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+#home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="20%" cy="20%" r="20%" fill="url(%23a)"/><circle cx="80%" cy="80%" r="25%" fill="url(%23a)"/><circle cx="40%" cy="70%" r="15%" fill="url(%23a)"/></svg>') no-repeat center center;
+    background-size: cover;
+    opacity: 0.3;
+}
+
+/* Animations */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Cards and Hover Effects */
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Project Cards */
+.project-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Skill Cards */
+.skill-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.skill-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
+}
+
+.skill-card .icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Experience Timeline */
+.experience-item {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.experience-item:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Contact Form */
+.contact-form {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #F9FAFB;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* Section Dividers */
+.section-divider {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    margin: 0 auto 3rem;
+    border-radius: 2px;
+}
+
+/* GitHub Activity Section Styles */
+#github-activity {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.github-stats-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.github-stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.github-stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.github-stat-number:hover {
+    transform: scale(1.1);
+}
+
+/* GitHub contribution calendar styling */
+.github-calendar-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    overflow-x: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.github-calendar-container img {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.github-calendar-container:hover img {
+    transform: scale(1.02);
+}
+
+/* GitHub stats loading animation */
+@keyframes loadingPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.github-loading {
+    animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+/* GitHub language stats styling */
+.github-languages-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.github-languages-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.8s ease;
+}
+
+.github-languages-card:hover::before {
+    left: 100%;
+}
+
+/* Responsive GitHub section */
+@media (max-width: 768px) {
+    .github-calendar-container {
+        padding: 1rem;
+    }
+    
+    .github-calendar-container img {
+        min-width: 500px;
+    }
+    
+    .github-stat-number {
+        font-size: 1.5rem;
+    }
+}
+
+/* GitHub profile CTA button enhancement */
+.github-cta-button {
+    background: linear-gradient(135deg, #1f2937, #374151);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.github-cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.github-cta-button:hover::before {
+    left: 100%;
+}
+
+.github-cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(31, 41, 55, 0.3);
+}
+
+/* GitHub stats animation delays */
+.github-stat-item:nth-child(1) .github-stat-number {
+    animation-delay: 0.1s;
+}
+
+.github-stat-item:nth-child(2) .github-stat-number {
+    animation-delay: 0.2s;
+}
+
+.github-stat-item:nth-child(3) .github-stat-number {
+    animation-delay: 0.3s;
+}
+
+.github-stat-item:nth-child(4) .github-stat-number {
+    animation-delay: 0.4s;
+}
+
+/* Enhanced GitHub section background pattern */
+#github-activity::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+#github-activity > .max-w-7xl {
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content p {
+        font-size: 1.125rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .grid-responsive {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scroll Progress Indicator */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    z-index: 9999;
+    transition: width 0.3s ease;
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-light: #1F2937;
+        --text-dark: #F9FAFB;
+        --text-light: #D1D5DB;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Focus Styles for Accessibility */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-color: #0066CC;
+        --text-dark: #000000;
+        --text-light: #333333;
+    }
+}
+
+/* Reduced Transparency */
+@media (prefers-reduced-transparency: reduce) {
+    #navbar {
+        background-color: white;
+        backdrop-filter: none;
+    }
+}
+
+/* Certificate Toggle Styles */
+#additional-certificates {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#additional-certificates.hidden {
+    display: none;
+}
+
+#show-all-certificates {
+    position: relative;
+    overflow: hidden;
+}
+
+#show-all-certificates:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+#show-all-certificates:active {
+    transform: translateY(0);
+}
+
+/* Arrow animation */
+#cert-arrow-down,
+#cert-arrow-up {
+    transition: transform 0.2s ease;
+}
+
+#show-all-certificates:hover #cert-arrow-down,
+#show-all-certificates:hover #cert-arrow-up {
+    transform: translateY(1px);
+}
+
+/* Certificate cards animation */
+.bg-white {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bg-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Private Projects Toggle Styles */
+#additional-private-projects {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#additional-private-projects.hidden {
+    display: none;
+}
+
+#show-all-private-projects {
+    position: relative;
+    overflow: hidden;
+}
+
+#show-all-private-projects:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+#show-all-private-projects:active {
+    transform: translateY(0);
+}
+
+/* Private project arrows animation */
+#private-arrow-down,
+#private-arrow-up {
+    transition: transform 0.2s ease;
+}
+
+#show-all-private-projects:hover #private-arrow-down,
+#show-all-private-projects:hover #private-arrow-up {
+    transform: translateY(1px);
+}
+
+/* Enhanced project card hover effects */
+.bg-gray-50:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}

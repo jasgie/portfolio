@@ -1,0 +1,35 @@
+{
+  "name": "jastine-gatdula-portfolio",
+  "version": "1.0.0",
+  "description": "Professional portfolio website for Jastine Gatdula",
+  "main": "docs/index.html",
+  "scripts": {
+    "start": "cd docs && python -m http.server 8000",
+    "start:node": "cd docs && npx http-server -p 8000",
+    "validate": "echo 'Validating HTML...' && echo 'No validation tool configured yet'",
+    "deploy": "echo 'Deployment handled by GitHub Actions'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/[username]/[repository-name].git"
+  },
+  "keywords": [
+    "portfolio",
+    "website",
+    "personal",
+    "professional",
+    "github-pages",
+    "responsive",
+    "tailwind"
+  ],
+  "author": "Jastine Gatdula",
+  "license": "MIT",
+  "homepage": "https://[username].github.io/[repository-name]",
+  "devDependencies": {},
+  "dependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
