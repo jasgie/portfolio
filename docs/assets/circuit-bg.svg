@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <pattern id="circuit" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- Circuit board lines -->
+      <path d="M0 50 L200 50 M50 0 L50 200 M150 0 L150 200 M0 150 L200 150" 
+            stroke="#1e293b" stroke-width="1" opacity="0.3"/>
+      <!-- Circuit nodes -->
+      <circle cx="50" cy="50" r="3" fill="#3b82f6" opacity="0.4"/>
+      <circle cx="150" cy="50" r="2" fill="#06b6d4" opacity="0.3"/>
+      <circle cx="50" cy="150" r="2" fill="#8b5cf6" opacity="0.3"/>
+      <circle cx="150" cy="150" r="3" fill="#3b82f6" opacity="0.4"/>
+      <!-- Connection paths -->
+      <path d="M50 50 Q100 25 150 50 M50 150 Q100 125 150 150" 
+            stroke="#3b82f6" stroke-width="1" fill="none" opacity="0.2"/>
+    </pattern>
+  </defs>
+  
+  <!-- Dark gradient background -->
+  <rect width="1920" height="1080" fill="url(#darkGradient)"/>
+  <defs>
+    <linearGradient id="darkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circuit pattern overlay -->
+  <rect width="1920" height="1080" fill="url(#circuit)" opacity="0.6"/>
+  
+  <!-- Additional tech elements -->
+  <g opacity="0.1">
+    <!-- Data flow lines -->
+    <path d="M0 200 Q480 100 960 200 Q1440 300 1920 200" 
+          stroke="#3b82f6" stroke-width="2" fill="none"/>
+    <path d="M0 400 Q480 500 960 400 Q1440 300 1920 400" 
+          stroke="#06b6d4" stroke-width="1" fill="none"/>
+    <path d="M0 600 Q480 700 960 600 Q1440 500 1920 600" 
+          stroke="#8b5cf6" stroke-width="1" fill="none"/>
+  </g>
+</svg>

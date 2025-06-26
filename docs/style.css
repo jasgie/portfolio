@@ -9,6 +9,63 @@
     --text-light: #64748B;
 }
 
+/* Tech-themed Hero Background */
+.hero-tech-bg {
+    background-image: 
+        linear-gradient(135deg, rgba(10, 10, 30, 0.8) 0%, rgba(10, 10, 30, 0.2) 100%),
+        url('assets/circuit-bg.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* Fallback circuit pattern using CSS */
+.circuit-pattern {
+    background-image: 
+        radial-gradient(circle at 25% 25%, #00d4ff 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, #0099cc 1px, transparent 1px),
+        linear-gradient(45deg, transparent 40%, rgba(0, 212, 255, 0.1) 50%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, rgba(0, 153, 204, 0.1) 50%, transparent 60%);
+    background-size: 60px 60px, 40px 40px, 80px 80px, 80px 80px;
+    background-position: 0 0, 20px 20px, 0 0, 0 0;
+    width: 100%;
+    height: 100%;
+    animation: circuitFlow 20s linear infinite;
+}
+
+@keyframes circuitFlow {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    25% {
+        transform: translateX(-20px) translateY(-10px);
+    }
+    50% {
+        transform: translateX(-40px) translateY(0);
+    }
+    75% {
+        transform: translateX(-20px) translateY(10px);
+    }
+    100% {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+/* Text shadows for better readability on dark backgrounds */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Enhanced button styles for dark theme */
+.hero-tech-bg a {
+    backdrop-filter: blur(10px);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -460,6 +517,12 @@ body {
         --text-dark: #F9FAFB;
         --text-light: #D1D5DB;
     }
+    
+    .hero-tech-bg {
+        background-image: 
+            linear-gradient(135deg, rgba(5, 5, 15, 0.9) 0%, rgba(5, 5, 15, 0.3) 100%),
+            url('assets/circuit-bg.svg');
+    }
 }
 
 /* Accessibility */
@@ -579,8 +642,27 @@ textarea:focus {
     transform: translateY(1px);
 }
 
-/* Enhanced project card hover effects */
-.bg-gray-50:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+/* Responsive adjustments for tech background */
+@media (max-width: 768px) {
+    .hero-tech-bg {
+        background-attachment: scroll; /* Fixed attachment can cause issues on mobile */
+        background-size: cover;
+    }
+    
+    .circuit-pattern {
+        animation-duration: 30s; /* Slower animation on mobile for better performance */
+    }
+    
+    .text-shadow-lg {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .hero-tech-bg {
+        background-image: 
+            linear-gradient(135deg, rgba(5, 5, 15, 0.9) 0%, rgba(5, 5, 15, 0.3) 100%),
+            url('assets/circuit-bg.svg');
+    }
 }
