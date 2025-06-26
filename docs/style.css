@@ -9,6 +9,83 @@
     --text-light: #64748B;
 }
 
+/* Dark Theme Global Styles */
+body {
+    background-color: #111827;
+    color: #F9FAFB;
+}
+
+/* Section Background Overrides for Dark Theme */
+section {
+    background-color: #111827 !important;
+}
+
+section:nth-child(even) {
+    background-color: #1F2937 !important;
+}
+
+/* Update specific sections */
+#about { background-color: #1F2937 !important; }
+#experience { background-color: #111827 !important; }
+#projects { background-color: #1F2937 !important; }
+#skills { background-color: #111827 !important; }
+#education { background-color: #1F2937 !important; }
+#github-activity { background-color: #111827 !important; }
+#contact { background-color: #1F2937 !important; }
+
+/* Text Color Updates */
+.text-gray-900 { color: #F9FAFB !important; }
+.text-gray-700 { color: #D1D5DB !important; }
+.text-gray-600 { color: #9CA3AF !important; }
+.text-gray-500 { color: #6B7280 !important; }
+
+/* Card and Component Updates */
+.bg-white {
+    background-color: #374151 !important;
+    border: 1px solid #4B5563;
+}
+
+.bg-gray-50 {
+    background-color: #374151 !important;
+    border: 1px solid #4B5563;
+}
+
+.bg-blue-50 {
+    background-color: #1E3A8A !important;
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #1F2937, #111827) !important;
+}
+
+/* Navigation Dark Theme */
+#navbar {
+    background-color: rgba(17, 24, 39, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #374151;
+}
+
+/* Button Updates */
+.bg-blue-600 {
+    background-color: #2563EB !important;
+}
+
+.bg-blue-600:hover {
+    background-color: #1D4ED8 !important;
+}
+
+/* Input and Form Updates */
+input, textarea, select {
+    background-color: #374151 !important;
+    border-color: #4B5563 !important;
+    color: #F9FAFB !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #3B82F6 !important;
+    outline: 2px solid #3B82F6 !important;
+}
+
 /* Tech-themed Hero Background */
 .hero-tech-bg {
     background-image: 
@@ -665,4 +742,52 @@ textarea:focus {
             linear-gradient(135deg, rgba(5, 5, 15, 0.9) 0%, rgba(5, 5, 15, 0.3) 100%),
             url('assets/circuit-bg.svg');
     }
+}
+
+/* Additional Dark Theme Enhancements */
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* GitHub Stats Dark Theme */
+.github-stats img {
+    filter: brightness(0.9) contrast(1.1);
+    border-radius: 8px;
+}
+
+/* Certificate and Project Cards Dark Theme */
+.bg-green-100 { background-color: #064E3B !important; color: #A7F3D0 !important; }
+.bg-blue-100 { background-color: #1E3A8A !important; color: #DBEAFE !important; }
+.bg-purple-100 { background-color: #581C87 !important; color: #E9D5FF !important; }
+.bg-red-100 { background-color: #7F1D1D !important; color: #FECACA !important; }
+.bg-yellow-100 { background-color: #78350F !important; color: #FEF3C7 !important; }
+.bg-orange-100 { background-color: #9A3412 !important; color: #FED7AA !important; }
+.bg-pink-100 { background-color: #831843 !important; color: #FBCFE8 !important; }
+.bg-cyan-100 { background-color: #155E75 !important; color: #CFFAFE !important; }
+
+/* Text Colors for Dark Theme */
+.text-green-800 { color: #A7F3D0 !important; }
+.text-blue-800 { color: #DBEAFE !important; }
+.text-purple-800 { color: #E9D5FF !important; }
+.text-red-800 { color: #FECACA !important; }
+.text-yellow-800 { color: #FEF3C7 !important; }
+.text-orange-800 { color: #FED7AA !important; }
+.text-pink-800 { color: #FBCFE8 !important; }
+.text-cyan-800 { color: #CFFAFE !important; }
+
+/* Border Colors for Dark Theme */
+.border-gray-300 { border-color: #4B5563 !important; }
+.border-yellow-200 { border-color: #78350F !important; }
+
+/* Hover Effects for Dark Theme */
+.hover\:shadow-lg:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
 }
