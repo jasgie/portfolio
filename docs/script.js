@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollProgress();
     initializeTypingEffect();
     initializeGitHubStats();
+    
+    // Initialize particles with a small delay to ensure everything is loaded
+    setTimeout(initializeParticles, 500);
 });
 
 // Navigation functionality
@@ -606,6 +609,100 @@ function togglePrivateProjects() {
             additionalProjects.style.transition = '';
         }, 400);
     }
+}
+
+// Particles.js Configuration
+function initializeParticles() {
+    console.log('Initializing particles...');
+    
+    // Check if particles.js is loaded
+    if (typeof particlesJS === 'undefined') {
+        console.error('particles.js library not loaded');
+        return;
+    }
+    
+    // Check if container exists
+    const container = document.getElementById('particles-js');
+    if (!container) {
+        console.error('particles-js container not found');
+        return;
+    }
+    
+    console.log('particles.js container found, initializing...');
+    
+    // Add a temporary visual indicator
+    container.style.border = '2px solid red';
+    setTimeout(() => {
+        container.style.border = 'none';
+    }, 3000);
+
+    particlesJS('particles-js', {
+        particles: {
+            number: {
+                value: 80,
+                density: {
+                    enable: true,
+                    value_area: 800
+                }
+            },
+            color: {
+                value: '#3B82F6'
+            },
+            shape: {
+                type: 'circle'
+            },
+            opacity: {
+                value: 0.5,
+                random: false
+            },
+            size: {
+                value: 3,
+                random: true
+            },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: '#3B82F6',
+                opacity: 0.4,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 6,
+                direction: 'none',
+                random: false,
+                straight: false,
+                out_mode: 'out',
+                bounce: false
+            }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: {
+                onhover: {
+                    enable: true,
+                    mode: 'repulse'
+                },
+                onclick: {
+                    enable: true,
+                    mode: 'push'
+                },
+                resize: true
+            },
+            modes: {
+                repulse: {
+                    distance: 100,
+                    duration: 0.4
+                },
+                push: {
+                    particles_nb: 4
+                }
+            }
+        },
+        retina_detect: true
+    }, function() {
+        console.log('Particles.js initialized successfully!');
+    });
 }
 
 // Initialize everything when the page is fully loaded

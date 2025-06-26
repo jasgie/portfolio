@@ -791,3 +791,22 @@ textarea:focus {
 .hover\:shadow-lg:hover {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
 }
+
+/* Particles.js Styling */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-image: url('');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    z-index: 1;
+}
+
+/* Ensure hero content is above particles */
+.hero-tech-bg .relative {
+    position: relative;
+    z-index: 10;
+}
