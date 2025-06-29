@@ -629,12 +629,6 @@ function initializeParticles() {
     }
     
     console.log('particles.js container found, initializing...');
-    
-    // Add a temporary visual indicator
-    container.style.border = '2px solid red';
-    setTimeout(() => {
-        container.style.border = 'none';
-    }, 3000);
 
     particlesJS('particles-js', {
         particles: {
