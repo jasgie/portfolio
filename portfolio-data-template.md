@@ -31,13 +31,20 @@ The journey from student to educator at Holy Child Central Colleges has been a f
 ---
 
 ### Job #2
-**Job Title:** Central Sterile Supply Technician  
-**Company Name:** General Santos Doctors Hospital, Inc.  
+**Job Title:** Medical Encoder / CSR In-Charge (OR/DR Complex)  
+**Company Name:** General Santos Doctors' Hospital, Inc.  
 **Employment Type:** Full-time  
 **Start Date:** October 2023  
 **End Date:** March 2024  
 **Location:** General Santos, Soccsksargen, Philippines  
-**Description:** Supported hospital operations by managing and sterilizing medical equipment with precision and strict adherence to protocols.
+**Description:**  
+Served as the **Medical Encoder and Central Supply Room (CSR) In-Charge** for the **Operating Room and Delivery Room Complex** in a fast-paced clinical environment. Key responsibilities included:
+- **Medical Encoding:** Accurate documentation and encoding of medical records, surgical procedures, and patient data
+- **Sterilization Preparation:** Coordinating and preparing sterile supplies, instruments, and equipment for surgeries and deliveries
+- **OR/DR Supply Handling:** Managing inventory and ensuring efficient distribution of medical supplies to operating and delivery rooms
+- **Clinical Support Tasks:** Supporting medical staff with materials handling, equipment readiness, and administrative functions
+- **Quality Assurance:** Ensuring strict adherence to hospital sterilization protocols and infection control standards
+
 
 ---
 
