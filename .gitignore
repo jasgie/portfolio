@@ -1,5 +1,7 @@
 # Dependencies
 node_modules/
+vendor/
+composer.phar
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
