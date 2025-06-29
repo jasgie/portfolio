@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #005a87; }
+        .message { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>Contact Form Test</h1>
+    <p>Use this form to test the contact form functionality.</p>
+    
+    <div id="message" style="display: none;"></div>
+    
+    <form id="testForm">
+        <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" name="firstName" value="Test" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" name="lastName" value="User" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" value="test@example.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="subject">Subject *</label>
+            <select id="subject" name="subject" required>
+                <option value="">Select a topic</option>
+                <option value="Programming Lessons" selected>Programming Lessons</option>
+                <option value="Web Development Project">Web Development Project</option>
+                <option value="IT Support & Troubleshooting">IT Support & Troubleshooting</option>
+                <option value="Photobooth Rental">Photobooth Rental</option>
+                <option value="Certification Coaching">Certification Coaching</option>
+                <option value="Collaboration Opportunity">Collaboration Opportunity</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" rows="5" required>This is a test message from the contact form test page. If you receive this, the contact form is working correctly!</textarea>
+        </div>
+        
+        <button type="submit" id="submitBtn">
+            <span id="btnText">Send Test Message</span>
+            <span id="btnLoading" style="display: none;">Sending...</span>
+        </button>
+    </form>
+    
+    <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+        <strong>Debug Options:</strong><br>
+        <a href="debug_env.php">Check Environment Variables</a> | 
+        <a href="test_email.php">Test Direct Email</a> | 
+        <a href="index.html">Back to Portfolio</a>
+    </p>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const messageDiv = document.getElementById('message');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            messageDiv.style.display = 'block';
+            messageDiv.className = 'message loading';
+            messageDiv.textContent = 'Sending your test message...';
+            
+            try {
+                const formData = new FormData(this);
+                const response = await fetch('send_email.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                messageDiv.className = result.success ? 'message success' : 'message error';
+                messageDiv.textContent = result.message;
+                
+                if (result.debug) {
+                    messageDiv.innerHTML += '<br><br><strong>Debug Info:</strong><br>' + result.debug;
+                }
+                
+                if (result.success) {
+                    document.getElementById('testForm').reset();
+                }
+                
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Network error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollProgress();
     initializeTypingEffect();
     initializeGitHubStats();
+    initializeContactForm();
     
     // Initialize particles with a small delay to ensure everything is loaded
     setTimeout(initializeParticles, 500);
@@ -123,47 +124,83 @@ function initializeMobileMenu() {
     }
 }
 
-// Contact form functionality
+// Contact Form Functionality
 function initializeContactForm() {
-    const contactForm = document.getElementById('contact-form');
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnLoading = document.getElementById('btn-loading');
+    const formMessage = document.getElementById('form-message');
     
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+    if (!form) return;
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Disable form and show loading state
+        setFormState(true);
+        
+        // Get form data
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            });
             
-            // Get form data
-            const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
+            const result = await response.json();
             
-            // Basic validation
-            if (!name || !email || !subject || !message) {
-                showNotification('Please fill in all fields.', 'error');
-                return;
+            if (result.success) {
+                showMessage(result.message, 'success');
+                form.reset();
+            } else {
+                showMessage(result.message, 'error');
             }
-            
-            if (!isValidEmail(email)) {
-                showNotification('Please enter a valid email address.', 'error');
-                return;
-            }
-            
-            // Simulate form submission
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            
-            submitButton.textContent = 'Sending...';
-            submitButton.disabled = true;
-            
-            // Simulate API call
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showMessage('Sorry, there was an error sending your message. Please try again or contact me directly at +63 907 657 9853.', 'error');
+        } finally {
+            setFormState(false);
+        }
+    });
+    
+    function setFormState(isLoading) {
+        if (isLoading) {
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+        } else {
+            submitBtn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+        }
+    }
+    
+    function showMessage(message, type) {
+        formMessage.className = `mb-6 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`;
+        formMessage.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    ${type === 'success' 
+                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+                        : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
+                    }
+                </svg>
+                <span>${message}</span>
+            </div>
+        `;
+        formMessage.classList.remove('hidden');
+        
+        // Scroll to message
+        formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Auto-hide success messages after 10 seconds
+        if (type === 'success') {
             setTimeout(() => {
-                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
-                contactForm.reset();
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-            }, 2000);
-        });
+                formMessage.classList.add('hidden');
+            }, 10000);
+        }
     }
 }
 
