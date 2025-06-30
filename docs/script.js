@@ -131,8 +131,17 @@ function initializeContactForm() {
     const btnText = document.getElementById('btn-text');
     const btnLoading = document.getElementById('btn-loading');
     const formMessage = document.getElementById('form-message');
+    const githubPagesNotice = document.getElementById('github-pages-notice');
     
     if (!form) return;
+    
+    // Check if we're on GitHub Pages and show notice
+    const isGitHubPages = window.location.hostname.includes('github.io') || 
+                          window.location.protocol === 'file:';
+    
+    if (isGitHubPages && githubPagesNotice) {
+        githubPagesNotice.classList.remove('hidden');
+    }
     
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -140,26 +149,69 @@ function initializeContactForm() {
         // Disable form and show loading state
         setFormState(true);
         
+        // Check if we're on GitHub Pages (static hosting)
+        const isGitHubPages = window.location.hostname.includes('github.io') || 
+                              window.location.protocol === 'file:';
+        
         // Get form data
         const formData = new FormData(form);
+        const firstName = formData.get('firstName');
+        const lastName = formData.get('lastName');
+        const email = formData.get('email');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
         
         try {
-            const response = await fetch('send_email.php', {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                showMessage(result.message, 'success');
+            if (isGitHubPages) {
+                // For GitHub Pages, use mailto as fallback
+                const mailtoLink = `mailto:gatdulajastine@gmail.com?subject=${encodeURIComponent('Portfolio Contact: ' + subject)}&body=${encodeURIComponent(
+                    `From: ${firstName} ${lastName}\n` +
+                    `Email: ${email}\n` +
+                    `Subject: ${subject}\n\n` +
+                    `Message:\n${message}\n\n` +
+                    `---\n` +
+                    `Sent from: ${window.location.href}`
+                )}`;
+                
+                // Open email client
+                window.location.href = mailtoLink;
+                
+                // Show success message
+                showMessage('Your email client has been opened with your message pre-filled. Please send the email to complete your contact request.', 'success');
                 form.reset();
             } else {
-                showMessage(result.message, 'error');
+                // For PHP-enabled hosting, use the PHP script
+                const response = await fetch('send_email.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage(result.message, 'success');
+                    form.reset();
+                } else {
+                    showMessage(result.message, 'error');
+                }
             }
         } catch (error) {
             console.error('Form submission error:', error);
-            showMessage('Sorry, there was an error sending your message. Please try again or contact me directly at +63 907 657 9853.', 'error');
+            
+            // Fallback to mailto even if PHP fails
+            const mailtoLink = `mailto:gatdulajastine@gmail.com?subject=${encodeURIComponent('Portfolio Contact: ' + subject)}&body=${encodeURIComponent(
+                `From: ${firstName} ${lastName}\n` +
+                `Email: ${email}\n` +
+                `Subject: ${subject}\n\n` +
+                `Message:\n${message}\n\n` +
+                `---\n` +
+                `Sent from: ${window.location.href}`
+            )}`;
+            
+            showMessage(
+                `Unable to send message automatically. Please <a href="${mailtoLink}" class="text-blue-600 underline">click here to open your email client</a> or contact me directly at <a href="tel:+639076579853" class="text-blue-600 underline">+63 907 657 9853</a>.`, 
+                'error'
+            );
         } finally {
             setFormState(false);
         }
