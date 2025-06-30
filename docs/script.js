@@ -1,816 +1,879 @@
-// Portfolio JavaScript Functionality
+// iOS-Inspired Portfolio JavaScript with Alpine.js
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeNavigation();
-    initializeAnimations();
-    initializeMobileMenu();
-    initializeScrollProgress();
-    initializeTypingEffect();
-    initializeGitHubStats();
-    initializeContactForm();
-    
-    // Initialize particles with a small delay to ensure everything is loaded
-    setTimeout(initializeParticles, 500);
-});
-
-// Navigation functionality
-function initializeNavigation() {
-    const navbar = document.getElementById('navbar');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    // Smooth scrolling for navigation links
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
+// Main Portfolio App
+function portfolioApp() {
+    return {
+        // State Management
+        darkMode: false,
+        mobileMenuOpen: false,
+        contactModalOpen: false,
+        
+        // Contact Form
+        contactForm: {
+            name: '',
+            email: '',
+            message: '',
+            sending: false
+        },
+        
+        // Initialize
+        init() {
+            // Check for saved dark mode preference
+            this.darkMode = localStorage.getItem('darkMode') === 'true' || 
+                           (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
             
-            if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Update active navigation item on scroll
-    window.addEventListener('scroll', function() {
-        let current = '';
-        const sections = document.querySelectorAll('section');
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.clientHeight;
+            // Apply dark mode
+            this.applyDarkMode();
             
-            if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-                current = section.getAttribute('id');
-            }
-        });
+            // Smooth scrolling for navigation links
+            this.initSmoothScrolling();
+            
+            // Initialize intersection observer for animations
+            this.initScrollAnimations();
+        },
         
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
+        // Dark Mode Toggle
+        toggleDarkMode() {
+            this.darkMode = !this.darkMode;
+            this.applyDarkMode();
+            localStorage.setItem('darkMode', this.darkMode);
+        },
         
-        // Navbar background on scroll
-        if (window.scrollY > 50) {
-            navbar.classList.add('shadow-lg');
-        } else {
-            navbar.classList.remove('shadow-lg');
-        }
-    });
-}
-
-// Animation functionality
-function initializeAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, observerOptions);
-    
-    // Observe all fade-in elements
-    const fadeElements = document.querySelectorAll('.fade-in');
-    fadeElements.forEach(el => observer.observe(el));
-    
-    // Add staggered animation delay to skill cards
-    const skillCards = document.querySelectorAll('#skills .fade-in');
-    skillCards.forEach((card, index) => {
-        card.style.transitionDelay = `${index * 0.1}s`;
-    });
-    
-    // Add staggered animation delay to project cards
-    const projectCards = document.querySelectorAll('#projects .fade-in');
-    projectCards.forEach((card, index) => {
-        card.style.transitionDelay = `${index * 0.2}s`;
-    });
-}
-
-// Mobile menu functionality
-function initializeMobileMenu() {
-    const mobileMenuButton = document.querySelector('.mobile-menu-button');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    
-    if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // Close mobile menu when clicking on a link
-        const mobileNavLinks = mobileMenu.querySelectorAll('.nav-link');
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileMenu.classList.add('hidden');
-            }
-        });
-    }
-}
-
-// Contact Form Functionality
-function initializeContactForm() {
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const btnText = document.getElementById('btn-text');
-    const btnLoading = document.getElementById('btn-loading');
-    const formMessage = document.getElementById('form-message');
-    const githubPagesNotice = document.getElementById('github-pages-notice');
-    
-    if (!form) return;
-    
-    // Check if we're on GitHub Pages and show notice
-    const isGitHubPages = window.location.hostname.includes('github.io') || 
-                          window.location.protocol === 'file:';
-    
-    if (isGitHubPages && githubPagesNotice) {
-        githubPagesNotice.classList.remove('hidden');
-    }
-    
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        // Disable form and show loading state
-        setFormState(true);
-        
-        // Check if we're on GitHub Pages (static hosting)
-        const isGitHubPages = window.location.hostname.includes('github.io') || 
-                              window.location.protocol === 'file:';
-        
-        // Get form data
-        const formData = new FormData(form);
-        const firstName = formData.get('firstName');
-        const lastName = formData.get('lastName');
-        const email = formData.get('email');
-        const subject = formData.get('subject');
-        const message = formData.get('message');
-        
-        try {
-            if (isGitHubPages) {
-                // For GitHub Pages, use mailto as fallback
-                const mailtoLink = `mailto:gatdulajastine@gmail.com?subject=${encodeURIComponent('Portfolio Contact: ' + subject)}&body=${encodeURIComponent(
-                    `From: ${firstName} ${lastName}\n` +
-                    `Email: ${email}\n` +
-                    `Subject: ${subject}\n\n` +
-                    `Message:\n${message}\n\n` +
-                    `---\n` +
-                    `Sent from: ${window.location.href}`
-                )}`;
-                
-                // Open email client
-                window.location.href = mailtoLink;
-                
-                // Show success message
-                showMessage('Your email client has been opened with your message pre-filled. Please send the email to complete your contact request.', 'success');
-                form.reset();
+        applyDarkMode() {
+            if (this.darkMode) {
+                document.documentElement.classList.add('dark');
             } else {
-                // For PHP-enabled hosting, use the PHP script
+                document.documentElement.classList.remove('dark');
+            }
+        },
+        
+        // Contact Modal
+        openContactModal() {
+            this.contactModalOpen = true;
+            document.body.style.overflow = 'hidden';
+        },
+        
+        closeContactModal() {
+            this.contactModalOpen = false;
+            document.body.style.overflow = 'auto';
+            this.resetContactForm();
+        },
+        
+        resetContactForm() {
+            this.contactForm = {
+                name: '',
+                email: '',
+                message: '',
+                sending: false
+            };
+        },
+        
+        // Contact Form Submission
+        async submitContactForm() {
+            if (this.contactForm.sending) return;
+            
+            // Basic validation
+            if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) {
+                this.showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            this.contactForm.sending = true;
+            
+            try {
+                // Simulate API call - replace with actual endpoint
+                await this.sendEmail({
+                    name: this.contactForm.name,
+                    email: this.contactForm.email,
+                    message: this.contactForm.message
+                });
+                
+                this.showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+                this.closeContactModal();
+            } catch (error) {
+                console.error('Error sending message:', error);
+                this.showNotification('Failed to send message. Please try again.', 'error');
+            } finally {
+                this.contactForm.sending = false;
+            }
+        },
+        
+        // Email sending function
+        async sendEmail(formData) {
+            // Try to use the existing PHP endpoint first
+            try {
                 const response = await fetch('send_email.php', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
                 });
                 
-                const result = await response.json();
+                if (!response.ok) throw new Error('Server error');
                 
-                if (result.success) {
-                    showMessage(result.message, 'success');
-                    form.reset();
-                } else {
-                    showMessage(result.message, 'error');
+                return await response.json();
+            } catch (error) {
+                // Fallback to mailto link
+                const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+                const body = encodeURIComponent(
+                    `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+                );
+                window.open(`mailto:gatdulajastine@gmail.com?subject=${subject}&body=${body}`);
+                
+                // Simulate successful send for UI feedback
+                return Promise.resolve({ success: true });
+            }
+        },
+        
+        // Smooth Scrolling
+        initSmoothScrolling() {
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a[href^="#"]');
+                if (!link) return;
+                
+                e.preventDefault();
+                const targetId = link.getAttribute('href').slice(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const navHeight = document.querySelector('.glass-nav').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - navHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    this.mobileMenuOpen = false;
                 }
-            }
-        } catch (error) {
-            console.error('Form submission error:', error);
+            });
+        },
+        
+        // Scroll Animations
+        initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
             
-            // Fallback to mailto even if PHP fails
-            const mailtoLink = `mailto:gatdulajastine@gmail.com?subject=${encodeURIComponent('Portfolio Contact: ' + subject)}&body=${encodeURIComponent(
-                `From: ${firstName} ${lastName}\n` +
-                `Email: ${email}\n` +
-                `Subject: ${subject}\n\n` +
-                `Message:\n${message}\n\n` +
-                `---\n` +
-                `Sent from: ${window.location.href}`
-            )}`;
-            
-            showMessage(
-                `Unable to send message automatically. Please <a href="${mailtoLink}" class="text-blue-600 underline">click here to open your email client</a> or contact me directly at <a href="tel:+639076579853" class="text-blue-600 underline">+63 907 657 9853</a>.`, 
-                'error'
-            );
-        } finally {
-            setFormState(false);
-        }
-    });
-    
-    function setFormState(isLoading) {
-        if (isLoading) {
-            submitBtn.disabled = true;
-            btnText.classList.add('hidden');
-            btnLoading.classList.remove('hidden');
-        } else {
-            submitBtn.disabled = false;
-            btnText.classList.remove('hidden');
-            btnLoading.classList.add('hidden');
-        }
-    }
-    
-    function showMessage(message, type) {
-        formMessage.className = `mb-6 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`;
-        formMessage.innerHTML = `
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    ${type === 'success' 
-                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
-                        : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
                     }
-                </svg>
-                <span>${message}</span>
-            </div>
-        `;
-        formMessage.classList.remove('hidden');
+                });
+            }, observerOptions);
+            
+            // Observe elements that should animate on scroll
+            document.querySelectorAll('.glass-panel').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                observer.observe(el);
+            });
+        },
         
-        // Scroll to message
-        formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Auto-hide success messages after 10 seconds
-        if (type === 'success') {
+        // Notification System
+        showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-xl glass-panel transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="fas ${
+                        type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        'fa-info-circle'
+                    }"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
             setTimeout(() => {
-                formMessage.classList.add('hidden');
-            }, 10000);
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
         }
-    }
-}
-
-// Utility function for email validation
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
-    
-    // Set notification style based on type
-    switch (type) {
-        case 'success':
-            notification.classList.add('bg-green-500', 'text-white');
-            break;
-        case 'error':
-            notification.classList.add('bg-red-500', 'text-white');
-            break;
-        default:
-            notification.classList.add('bg-blue-500', 'text-white');
-    }
-    
-    notification.innerHTML = `
-        <div class="flex items-center">
-            <span>${message}</span>
-            <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.classList.remove('translate-x-full');
-    }, 100);
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        notification.classList.add('translate-x-full');
-        setTimeout(() => notification.remove(), 300);
-    }, 5000);
-}
-
-// Scroll progress indicator
-function initializeScrollProgress() {
-    // Create progress bar
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    document.body.prepend(progressBar);
-    
-    // Update progress on scroll
-    window.addEventListener('scroll', function() {
-        const scrolled = (window.pageYOffset / (document.body.scrollHeight - window.innerHeight)) * 100;
-        progressBar.style.width = `${Math.min(scrolled, 100)}%`;
-    });
-}
-
-// Typing effect for hero section
-function initializeTypingEffect() {
-    const heroTitle = document.querySelector('#home h1');
-    if (heroTitle) {
-        const text = 'Jastine Maderable Gatdula';
-        heroTitle.textContent = '';
-        
-        let i = 0;
-        const typeWriter = function() {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        };
-        
-        // Start typing effect after a delay
-        setTimeout(typeWriter, 1000);
-    }
-}
-
-// Smooth reveal animations for cards
-function animateCards() {
-    const cards = document.querySelectorAll('.hover-lift');
-    
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-}
-
-// Initialize card animations when DOM is loaded
-document.addEventListener('DOMContentLoaded', animateCards);
-
-// Skills animation
-function animateSkills() {
-    const skillCards = document.querySelectorAll('#skills .bg-white');
-    
-    skillCards.forEach((card, index) => {
-        card.addEventListener('mouseenter', function() {
-            // Add a subtle bounce effect
-            this.style.animation = 'bounce 0.6s ease-in-out';
-        });
-        
-        card.addEventListener('animationend', function() {
-            this.style.animation = '';
-        });
-    });
-}
-
-// Add bounce keyframes via JavaScript
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes bounce {
-        0%, 20%, 53%, 80%, 100% {
-            transform: translate3d(0,0,0);
-        }
-        40%, 43% {
-            transform: translate3d(0,-8px,0);
-        }
-        70% {
-            transform: translate3d(0,-4px,0);
-        }
-        90% {
-            transform: translate3d(0,-2px,0);
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Initialize skills animation
-document.addEventListener('DOMContentLoaded', animateSkills);
-
-// Lazy loading for images
-function initializeLazyLoading() {
-    const images = document.querySelectorAll('img[data-src]');
-    
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
-            }
-        });
-    });
-    
-    images.forEach(img => imageObserver.observe(img));
-}
-
-// Performance optimization: Debounce scroll events
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
     };
 }
 
-// Apply debouncing to scroll events
-const debouncedScrollHandler = debounce(() => {
-    // Any scroll-based animations or calculations
-}, 16); // ~60fps
-
-window.addEventListener('scroll', debouncedScrollHandler);
-
-// Keyboard navigation support
-document.addEventListener('keydown', function(e) {
-    // Enable keyboard navigation for mobile menu
-    if (e.key === 'Escape') {
-        const mobileMenu = document.querySelector('.mobile-menu');
-        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-            mobileMenu.classList.add('hidden');
-        }
-    }
-});
-
-// GitHub Statistics Integration
-function initializeGitHubStats() {
-    const githubUsername = 'jasgie'; // Replace with actual GitHub username
+// GitHub Stats Component
+function githubStats() {
+    const username = 'jasgie'; // Updated GitHub username
     
-    // Fetch GitHub user data
-    fetchGitHubUserStats(githubUsername);
-}
-
-// Fetch GitHub user statistics
-async function fetchGitHubUserStats(username) {
-    try {
-        // GitHub API endpoint for user data
-        const userResponse = await fetch(`https://api.github.com/users/${username}`);
+    return {
+        stats: {
+            public_repos: 0,
+            followers: 0,
+            following: 0
+        },
+        totalStars: 0,
         
-        if (!userResponse.ok) {
-            throw new Error('GitHub API request failed');
-        }
-        
-        const userData = await userResponse.json();
-        
-        // Fetch repositories data
-        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
-        const reposData = await reposResponse.json();
-        
-        // Calculate total stars across all repositories
-        const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-        
-        // Update the DOM with real data
-        updateGitHubStatsDisplay({
-            publicRepos: userData.public_repos,
-            followers: userData.followers,
-            following: userData.following,
-            totalStars: totalStars
-        });
-        
-    } catch (error) {
-        console.log('GitHub stats loading...', error);
-        // Show placeholder data if API fails
-        updateGitHubStatsDisplay({
-            publicRepos: '10+',
-            followers: '25+',
-            following: '50+',
-            totalStars: '15+'
-        });
-    }
-}
-
-// Update GitHub stats in the DOM
-function updateGitHubStatsDisplay(stats) {
-    const repoCountElement = document.getElementById('repo-count');
-    const followersCountElement = document.getElementById('followers-count');
-    const followingCountElement = document.getElementById('following-count');
-    const starsCountElement = document.getElementById('stars-count');
-    
-    if (repoCountElement) {
-        animateNumber(repoCountElement, stats.publicRepos);
-    }
-    if (followersCountElement) {
-        animateNumber(followersCountElement, stats.followers);
-    }
-    if (followingCountElement) {
-        animateNumber(followingCountElement, stats.following);
-    }
-    if (starsCountElement) {
-        animateNumber(starsCountElement, stats.totalStars);
-    }
-}
-
-// Animate number counting up
-function animateNumber(element, finalValue) {
-    const startValue = 0;
-    const duration = 2000; // 2 seconds
-    const startTime = Date.now();
-    
-    // Handle string values (like "10+")
-    if (typeof finalValue === 'string') {
-        element.textContent = finalValue;
-        return;
-    }
-    
-    function updateNumber() {
-        const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Easing function for smooth animation
-        const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-        const currentValue = Math.floor(startValue + (finalValue - startValue) * easeOutCubic);
-        
-        element.textContent = currentValue;
-        
-        if (progress < 1) {
-            requestAnimationFrame(updateNumber);
-        } else {
-            element.textContent = finalValue;
-        }
-    }
-    
-    requestAnimationFrame(updateNumber);
-}
-
-// GitHub repository showcase (optional enhancement)
-async function fetchFeaturedRepos(username, count = 3) {
-    try {
-        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=${count}`);
-        const repos = await response.json();
-        
-        return repos.map(repo => ({
-            name: repo.name,
-            description: repo.description || 'No description available',
-            url: repo.html_url,
-            language: repo.language,
-            stars: repo.stargazers_count,
-            forks: repo.forks_count,
-            updated: new Date(repo.updated_at).toLocaleDateString()
-        }));
-    } catch (error) {
-        console.log('Featured repos loading...', error);
-        return [];
-    }
-}
-
-// Enhanced GitHub profile link tracking
-function trackGitHubProfileClick() {
-    // Add analytics tracking if needed
-    console.log('GitHub profile visited');
-}
-
-// Add click tracking to GitHub profile link
-document.addEventListener('DOMContentLoaded', function() {
-    const githubProfileLink = document.querySelector('a[href*="github.com/jasgie"]');
-    if (githubProfileLink) {
-        githubProfileLink.addEventListener('click', trackGitHubProfileClick);
-    }
-});
-
-// Refresh GitHub stats periodically (optional)
-function startGitHubStatsRefresh() {
-    // Refresh every 5 minutes
-    setInterval(() => {
-        initializeGitHubStats();
-    }, 5 * 60 * 1000);
-}
-
-// Error handling for GitHub API rate limiting
-function handleGitHubAPIError(error) {
-    console.log('GitHub API Error:', error);
-    
-    // Show user-friendly message
-    const errorElements = document.querySelectorAll('[id$="-count"]');
-    errorElements.forEach(element => {
-        if (element.textContent === '-') {
-            element.textContent = '🔄';
-            element.title = 'Loading GitHub stats...';
-        }
-    });
-}
-
-// Certificate toggle functionality
-function toggleCertificates() {
-    const additionalCerts = document.getElementById('additional-certificates');
-    const buttonText = document.getElementById('cert-button-text');
-    const arrowDown = document.getElementById('cert-arrow-down');
-    const arrowUp = document.getElementById('cert-arrow-up');
-    const certCount = document.getElementById('cert-count');
-    
-    if (additionalCerts.classList.contains('hidden')) {
-        // Show additional certificates
-        additionalCerts.classList.remove('hidden');
-        buttonText.textContent = 'Show Less';
-        arrowDown.classList.add('hidden');
-        arrowUp.classList.remove('hidden');
-        certCount.textContent = 'Showing all 11 professional certifications';
-        
-        // Smooth scroll animation
-        additionalCerts.style.opacity = '0';
-        additionalCerts.style.transform = 'translateY(-20px)';
-        
-        setTimeout(() => {
-            additionalCerts.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-            additionalCerts.style.opacity = '1';
-            additionalCerts.style.transform = 'translateY(0)';
-        }, 10);
-    } else {
-        // Hide additional certificates
-        additionalCerts.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        additionalCerts.style.opacity = '0';
-        additionalCerts.style.transform = 'translateY(-20px)';
-        
-        setTimeout(() => {
-            additionalCerts.classList.add('hidden');
-            buttonText.textContent = 'Show All Certificates';
-            arrowDown.classList.remove('hidden');
-            arrowUp.classList.add('hidden');
-            certCount.textContent = 'Showing 6 of 11 professional certifications';
-            
-            // Reset styles
-            additionalCerts.style.opacity = '';
-            additionalCerts.style.transform = '';
-            additionalCerts.style.transition = '';
-        }, 300);
-    }
-}
-
-// Private Projects toggle functionality
-function togglePrivateProjects() {
-    const additionalProjects = document.getElementById('additional-private-projects');
-    const buttonText = document.getElementById('private-button-text');
-    const arrowDown = document.getElementById('private-arrow-down');
-    const arrowUp = document.getElementById('private-arrow-up');
-    const projectCount = document.getElementById('private-count');
-    
-    if (additionalProjects.classList.contains('hidden')) {
-        // Show additional private projects
-        additionalProjects.classList.remove('hidden');
-        buttonText.textContent = 'Show Less';
-        arrowDown.classList.add('hidden');
-        arrowUp.classList.remove('hidden');
-        projectCount.textContent = 'Showing all 10 private development projects';
-        
-        // Smooth scroll animation
-        additionalProjects.style.opacity = '0';
-        additionalProjects.style.transform = 'translateY(-20px)';
-        
-        setTimeout(() => {
-            additionalProjects.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-            additionalProjects.style.opacity = '1';
-            additionalProjects.style.transform = 'translateY(0)';
-        }, 10);
-    } else {
-        // Hide additional private projects
-        additionalProjects.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-        additionalProjects.style.opacity = '0';
-        additionalProjects.style.transform = 'translateY(-20px)';
-        
-        setTimeout(() => {
-            additionalProjects.classList.add('hidden');
-            buttonText.textContent = 'Show All Private Projects';
-            arrowDown.classList.remove('hidden');
-            arrowUp.classList.add('hidden');
-            projectCount.textContent = 'Showing 3 of 10 private development projects';
-            
-            // Reset styles
-            additionalProjects.style.opacity = '';
-            additionalProjects.style.transform = '';
-            additionalProjects.style.transition = '';
-        }, 400);
-    }
-}
-
-// Particles.js Configuration
-function initializeParticles() {
-    console.log('Initializing particles...');
-    
-    // Check if particles.js is loaded
-    if (typeof particlesJS === 'undefined') {
-        console.error('particles.js library not loaded');
-        return;
-    }
-    
-    // Check if container exists
-    const container = document.getElementById('particles-js');
-    if (!container) {
-        console.error('particles-js container not found');
-        return;
-    }
-    
-    console.log('particles.js container found, initializing...');
-
-    particlesJS('particles-js', {
-        particles: {
-            number: {
-                value: 80,
-                density: {
-                    enable: true,
-                    value_area: 800
-                }
-            },
-            color: {
-                value: '#3B82F6'
-            },
-            shape: {
-                type: 'circle'
-            },
-            opacity: {
-                value: 0.5,
-                random: false
-            },
-            size: {
-                value: 3,
-                random: true
-            },
-            line_linked: {
-                enable: true,
-                distance: 150,
-                color: '#3B82F6',
-                opacity: 0.4,
-                width: 1
-            },
-            move: {
-                enable: true,
-                speed: 6,
-                direction: 'none',
-                random: false,
-                straight: false,
-                out_mode: 'out',
-                bounce: false
+        async init() {
+            try {
+                await this.fetchGitHubStats();
+            } catch (error) {
+                console.error('Error fetching GitHub stats:', error);
+                // Set placeholder values
+                this.stats = {
+                    public_repos: '5+',
+                    followers: '10+',
+                    following: '15+'
+                };
+                this.totalStars = '25+';
             }
         },
-        interactivity: {
-            detect_on: 'canvas',
-            events: {
-                onhover: {
-                    enable: true,
-                    mode: 'repulse'
-                },
-                onclick: {
-                    enable: true,
-                    mode: 'push'
-                },
-                resize: true
-            },
-            modes: {
-                repulse: {
-                    distance: 100,
-                    duration: 0.4
-                },
-                push: {
-                    particles_nb: 4
+        
+        async fetchGitHubStats() {
+            try {
+                // Fetch user stats
+                const userResponse = await fetch(`https://api.github.com/users/${username}`);
+                if (!userResponse.ok) throw new Error('User not found');
+                
+                const userData = await userResponse.json();
+                this.stats = {
+                    public_repos: userData.public_repos,
+                    followers: userData.followers,
+                    following: userData.following
+                };
+                
+                // Fetch repositories to calculate total stars
+                const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
+                if (reposResponse.ok) {
+                    const repos = await reposResponse.json();
+                    this.totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
                 }
+                
+            } catch (error) {
+                throw error;
             }
-        },
-        retina_detect: true
-    }, function() {
-        console.log('Particles.js initialized successfully!');
-    });
+        }
+    };
 }
 
-// Initialize everything when the page is fully loaded
-window.addEventListener('load', function() {
-    initializeLazyLoading();
+// GitHub Repositories Component
+function githubRepos() {
+    const username = 'jasgie'; // Updated GitHub username
     
-    // Hide loading spinner if present
-    const loadingSpinner = document.querySelector('.loading-spinner');
-    if (loadingSpinner) {
-        loadingSpinner.style.display = 'none';
-    }
-    
-    // Initialize GitHub stats with a delay
-    setTimeout(initializeGitHubStats, 1000);
-});
-
-// Error handling for images
-document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.addEventListener('error', function() {
-            // Replace with placeholder if image fails to load
-            if (!this.src.includes('placeholder')) {
-                this.src = 'https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=Image+Not+Found';
+    return {
+        repos: [],
+        loading: true,
+        
+        async init() {
+            try {
+                await this.fetchRepositories();
+            } catch (error) {
+                console.error('Error fetching repositories:', error);
+                // Set placeholder repositories
+                this.repos = [
+                    {
+                        id: 1,
+                        name: 'portfolio-website',
+                        description: 'Personal portfolio website built with modern web technologies',
+                        html_url: 'https://github.com/jastinegatdula',
+                        language: 'JavaScript',
+                        stargazers_count: 5,
+                        updated_at: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        name: 'student-management-system',
+                        description: 'Java-based student management system for educational institutions',
+                        html_url: 'https://github.com/jastinegatdula',
+                        language: 'Java',
+                        stargazers_count: 3,
+                        updated_at: new Date().toISOString()
+                    },
+                    {
+                        id: 3,
+                        name: 'python-automation-scripts',
+                        description: 'Collection of Python scripts for task automation and data processing',
+                        html_url: 'https://github.com/jastinegatdula',
+                        language: 'Python',
+                        stargazers_count: 8,
+                        updated_at: new Date().toISOString()
+                    }
+                ];
+            } finally {
+                this.loading = false;
             }
+        },
+        
+        async fetchRepositories() {
+            try {
+                const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+                if (!response.ok) throw new Error('Repositories not found');
+                
+                const repos = await response.json();
+                this.repos = repos.filter(repo => !repo.fork); // Filter out forked repos
+                
+            } catch (error) {
+                throw error;
+            }
+        },
+        
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return '1 day ago';
+            if (diffDays < 30) return `${diffDays} days ago`;
+            if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+            return `${Math.floor(diffDays / 365)} years ago`;
+        }
+    };
+}
+
+// Programming Languages Statistics Component
+function programmingLanguagesStats() {
+    const username = 'jasgie';
+    
+    return {
+        publicLanguages: [],
+        privateLanguages: [],
+        combinedLanguages: [],
+        publicRepoCount: 0,
+        privateProjectCount: 5,
+        totalLanguages: 0,
+        totalProjects: 0,
+        totalExperience: 4,
+        totalCodeLines: '50K+',
+        loading: true,
+        
+        async init() {
+            try {
+                await this.fetchPublicLanguages();
+                this.setupPrivateLanguages();
+                this.calculateCombinedStats();
+            } catch (error) {
+                console.error('Error fetching language stats:', error);
+                this.setupFallbackData();
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        async fetchPublicLanguages() {
+            try {
+                // Fetch user repositories
+                const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
+                if (!reposResponse.ok) throw new Error('Failed to fetch repositories');
+                
+                const repos = await reposResponse.json();
+                this.publicRepoCount = repos.filter(repo => !repo.fork).length;
+                
+                // Language colors mapping
+                const languageColors = {
+                    'JavaScript': { color: '#f7df1e', lightColor: '#ffeb3b' },
+                    'Python': { color: '#3776ab', lightColor: '#4fc3f7' },
+                    'Java': { color: '#ed8b00', lightColor: '#ffb74d' },
+                    'TypeScript': { color: '#3178c6', lightColor: '#64b5f6' },
+                    'HTML': { color: '#e34f26', lightColor: '#ff8a65' },
+                    'CSS': { color: '#1572b6', lightColor: '#42a5f5' },
+                    'C++': { color: '#00599c', lightColor: '#26c6da' },
+                    'C#': { color: '#239120', lightColor: '#66bb6a' },
+                    'PHP': { color: '#777bb4', lightColor: '#9575cd' },
+                    'Ruby': { color: '#cc342d', lightColor: '#ef5350' },
+                    'Go': { color: '#00add8', lightColor: '#4dd0e1' },
+                    'Rust': { color: '#000000', lightColor: '#616161' },
+                    'Swift': { color: '#fa7343', lightColor: '#ff8a65' },
+                    'Kotlin': { color: '#7f52ff', lightColor: '#9c27b0' },
+                    'Dart': { color: '#0175c2', lightColor: '#2196f3' },
+                    'Shell': { color: '#89e051', lightColor: '#8bc34a' },
+                    'Dockerfile': { color: '#384d54', lightColor: '#607d8b' }
+                };
+                
+                // Aggregate language statistics
+                const languageStats = {};
+                let totalBytes = 0;
+                
+                for (const repo of repos.filter(repo => !repo.fork)) {
+                    try {
+                        const langResponse = await fetch(`https://api.github.com/repos/${username}/${repo.name}/languages`);
+                        if (langResponse.ok) {
+                            const languages = await langResponse.json();
+                            
+                            Object.entries(languages).forEach(([lang, bytes]) => {
+                                if (!languageStats[lang]) {
+                                    languageStats[lang] = {
+                                        name: lang,
+                                        bytes: 0,
+                                        repos: 0,
+                                        ...languageColors[lang] || { color: '#6b7280', lightColor: '#9ca3af' }
+                                    };
+                                }
+                                languageStats[lang].bytes += bytes;
+                                languageStats[lang].repos += 1;
+                                totalBytes += bytes;
+                            });
+                        }
+                    } catch (error) {
+                        console.warn(`Failed to fetch languages for ${repo.name}:`, error);
+                    }
+                }
+                
+                // Convert to array and calculate percentages
+                this.publicLanguages = Object.values(languageStats)
+                    .map(lang => ({
+                        ...lang,
+                        percentage: totalBytes > 0 ? Math.round((lang.bytes / totalBytes) * 100) : 0,
+                        bytes: this.formatBytes(lang.bytes)
+                    }))
+                    .sort((a, b) => b.percentage - a.percentage)
+                    .slice(0, 8); // Show top 8 languages
+                    
+            } catch (error) {
+                throw error;
+            }
+        },
+        
+        setupPrivateLanguages() {
+            // Private/Professional project language statistics
+            // Based on the private projects shown in the portfolio
+            this.privateLanguages = [
+                {
+                    name: 'Python',
+                    percentage: 35,
+                    projects: 3,
+                    experience: '3+ years',
+                    color: '#3776ab',
+                    lightColor: '#4fc3f7'
+                },
+                {
+                    name: 'JavaScript',
+                    percentage: 25,
+                    projects: 2,
+                    experience: '4+ years',
+                    color: '#f7df1e',
+                    lightColor: '#ffeb3b'
+                },
+                {
+                    name: 'Java',
+                    percentage: 15,
+                    projects: 1,
+                    experience: '3+ years',
+                    color: '#ed8b00',
+                    lightColor: '#ffb74d'
+                },
+                {
+                    name: 'C++',
+                    percentage: 12,
+                    projects: 1,
+                    experience: '2+ years',
+                    color: '#00599c',
+                    lightColor: '#26c6da'
+                },
+                {
+                    name: 'SQL',
+                    percentage: 8,
+                    projects: 3,
+                    experience: '3+ years',
+                    color: '#336791',
+                    lightColor: '#42a5f5'
+                },
+                {
+                    name: 'TypeScript',
+                    percentage: 5,
+                    projects: 1,
+                    experience: '2+ years',
+                    color: '#3178c6',
+                    lightColor: '#64b5f6'
+                }
+            ];
+        },
+        
+        calculateCombinedStats() {
+            // Combine public and private language data
+            const combinedMap = new Map();
+            
+            // Add public languages
+            this.publicLanguages.forEach(lang => {
+                combinedMap.set(lang.name, {
+                    name: lang.name,
+                    publicPercentage: lang.percentage,
+                    privatePercentage: 0,
+                    color: lang.color,
+                    lightColor: lang.lightColor,
+                    yearsExperience: this.getYearsExperience(lang.name),
+                    icon: this.getLanguageIcon(lang.name)
+                });
+            });
+            
+            // Add/merge private languages
+            this.privateLanguages.forEach(lang => {
+                if (combinedMap.has(lang.name)) {
+                    combinedMap.get(lang.name).privatePercentage = lang.percentage;
+                } else {
+                    combinedMap.set(lang.name, {
+                        name: lang.name,
+                        publicPercentage: 0,
+                        privatePercentage: lang.percentage,
+                        color: lang.color,
+                        lightColor: lang.lightColor,
+                        yearsExperience: this.getYearsExperience(lang.name),
+                        icon: this.getLanguageIcon(lang.name)
+                    });
+                }
+            });
+            
+            // Calculate totals and sort
+            this.combinedLanguages = Array.from(combinedMap.values())
+                .map(lang => ({
+                    ...lang,
+                    totalPercentage: Math.round((lang.publicPercentage + lang.privatePercentage) / 2)
+                }))
+                .sort((a, b) => b.totalPercentage - a.totalPercentage)
+                .slice(0, 10);
+            
+            // Calculate summary stats
+            this.totalLanguages = this.combinedLanguages.length;
+            this.totalProjects = this.publicRepoCount + this.privateProjectCount;
+        },
+        
+        setupFallbackData() {
+            // Fallback data when API fails
+            this.publicLanguages = [
+                { name: 'JavaScript', percentage: 40, repos: 3, bytes: '15.2 KB', color: '#f7df1e', lightColor: '#ffeb3b' },
+                { name: 'Python', percentage: 35, repos: 2, bytes: '12.8 KB', color: '#3776ab', lightColor: '#4fc3f7' },
+                { name: 'Java', percentage: 15, repos: 1, bytes: '5.5 KB', color: '#ed8b00', lightColor: '#ffb74d' },
+                { name: 'HTML', percentage: 10, repos: 2, bytes: '3.2 KB', color: '#e34f26', lightColor: '#ff8a65' }
+            ];
+            
+            this.publicRepoCount = 6;
+            this.setupPrivateLanguages();
+            this.calculateCombinedStats();
+        },
+        
+        getYearsExperience(language) {
+            const experience = {
+                'JavaScript': 4,
+                'Python': 3,
+                'Java': 3,
+                'C++': 2,
+                'SQL': 3,
+                'TypeScript': 2,
+                'HTML': 4,
+                'CSS': 4,
+                'PHP': 2,
+                'C#': 2
+            };
+            return experience[language] || 1;
+        },
+        
+        getLanguageIcon(language) {
+            const icons = {
+                'JavaScript': 'fab fa-js-square',
+                'Python': 'fab fa-python',
+                'Java': 'fab fa-java',
+                'HTML': 'fab fa-html5',
+                'CSS': 'fab fa-css3-alt',
+                'PHP': 'fab fa-php',
+                'C++': 'fas fa-code',
+                'C#': 'fas fa-code',
+                'TypeScript': 'fas fa-code',
+                'SQL': 'fas fa-database',
+                'Shell': 'fas fa-terminal',
+                'Dockerfile': 'fab fa-docker'
+            };
+            return icons[language] || 'fas fa-code';
+        },
+        
+        formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+    };
+}
+
+// Utility Functions
+const utils = {
+    // Debounce function for performance
+    debounce(func, wait, immediate) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                timeout = null;
+                if (!immediate) func(...args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func(...args);
+        };
+    },
+    
+    // Throttle function for scroll events
+    throttle(func, limit) {
+        let inThrottle;
+        return function(...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    },
+    
+    // Format numbers with commas
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    
+    // Copy text to clipboard
+    async copyToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            return true;
+        }
+    }
+};
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Add loading animation to GitHub cards
+    const githubCards = document.querySelectorAll('.github-card');
+    githubCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+    
+    // Add parallax effect to floating shapes
+    const shapes = document.querySelectorAll('.shape');
+    window.addEventListener('scroll', utils.throttle(() => {
+        const scrolled = window.pageYOffset;
+        shapes.forEach((shape, index) => {
+            const speed = 0.5 + (index * 0.1);
+            shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+        });
+    }, 10));
+    
+    // Add hover effect to skill sliders
+    const skillSliders = document.querySelectorAll('.ios-slider');
+    skillSliders.forEach(slider => {
+        slider.addEventListener('mouseenter', () => {
+            const fill = slider.querySelector('.slider-fill');
+            fill.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.5)';
+        });
+        
+        slider.addEventListener('mouseleave', () => {
+            const fill = slider.querySelector('.slider-fill');
+            fill.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.3)';
         });
     });
+    
+    // Keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+        // Close modal on Escape key
+        if (e.key === 'Escape') {
+            const app = Alpine.raw(document.querySelector('[x-data="portfolioApp()"]').__x.$data);
+            if (app.contactModalOpen) {
+                app.closeContactModal();
+            }
+            if (app.mobileMenuOpen) {
+                app.mobileMenuOpen = false;
+            }
+            if (document.getElementById('certificateModal').classList.contains('hidden') === false) {
+                closeCertificateModal();
+            }
+        }
+        
+        // Navigate through images with arrow keys
+        if (!document.getElementById('certificateModal').classList.contains('hidden')) {
+            if (e.key === 'ArrowLeft') {
+                previousImage();
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            }
+        }
+    });
+    
+    console.log('🚀 Portfolio initialized successfully!');
 });
+
+// Certificate Modal Functions
+let currentCertificate = null;
+let currentImageIndex = 0;
+let certificateImages = [];
+
+const certificates = {
+    'vex-iq': {
+        title: 'VEX IQ Gen 2 Robotics System - After-Sales Training',
+        images: [
+            {
+                src: 'assets/certificates/ast-vexiq-front.jpg',
+                alt: 'VEX IQ Certificate - Front',
+                title: 'Certificate Front'
+            },
+            {
+                src: 'assets/certificates/ast-vexiq-back.jpg',
+                alt: 'VEX IQ Certificate - Back',
+                title: 'Certificate Back'
+            }
+        ]
+    }
+};
+
+function openCertificateModal(certificateId) {
+    currentCertificate = certificates[certificateId];
+    if (!currentCertificate) return;
+    
+    currentImageIndex = 0;
+    certificateImages = currentCertificate.images;
+    
+    // Set modal title
+    document.getElementById('certificateModalTitle').textContent = currentCertificate.title;
+    
+    // Populate images
+    populateCertificateImages();
+    
+    // Show modal
+    document.getElementById('certificateModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent body scroll
+    
+    // Add smooth entrance animation
+    setTimeout(() => {
+        document.getElementById('certificateModal').classList.add('opacity-100');
+    }, 10);
+}
+
+function closeCertificateModal() {
+    document.getElementById('certificateModal').classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore body scroll
+    currentCertificate = null;
+    currentImageIndex = 0;
+    certificateImages = [];
+}
+
+function populateCertificateImages() {
+    const container = document.getElementById('certificateImages');
+    container.innerHTML = '';
+    
+    certificateImages.forEach((image, index) => {
+        const imageDiv = document.createElement('div');
+        imageDiv.className = `certificate-image ${index === currentImageIndex ? 'active' : 'hidden'} text-center`;
+        imageDiv.innerHTML = `
+            <div class="relative inline-block">
+                <img src="${image.src}" 
+                     alt="${image.alt}" 
+                     class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg border border-gray-200 dark:border-gray-600"
+                     style="cursor: zoom-in;"
+                     onclick="toggleImageZoom(this)">
+                <div class="absolute top-2 left-2 glass-panel px-3 py-1 rounded-lg">
+                    <span class="text-xs font-medium text-gray-700 dark:text-gray-300">${image.title}</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(imageDiv);
+    });
+    
+    updateImageCounter();
+    updateNavigationButtons();
+}
+
+function previousImage() {
+    if (currentImageIndex > 0) {
+        showImage(currentImageIndex - 1);
+    }
+}
+
+function nextImage() {
+    if (currentImageIndex < certificateImages.length - 1) {
+        showImage(currentImageIndex + 1);
+    }
+}
+
+function showImage(index) {
+    if (index < 0 || index >= certificateImages.length) return;
+    
+    // Hide current image
+    const currentImg = document.querySelector('.certificate-image.active');
+    if (currentImg) {
+        currentImg.classList.remove('active');
+        currentImg.classList.add('hidden');
+    }
+    
+    // Show new image
+    const newImg = document.querySelectorAll('.certificate-image')[index];
+    if (newImg) {
+        newImg.classList.remove('hidden');
+        newImg.classList.add('active');
+    }
+    
+    currentImageIndex = index;
+    updateImageCounter();
+    updateNavigationButtons();
+}
+
+function updateImageCounter() {
+    const counter = document.getElementById('imageCounter');
+    if (certificateImages.length > 1) {
+        counter.textContent = `${currentImageIndex + 1} of ${certificateImages.length}`;
+        counter.style.display = 'block';
+    } else {
+        counter.style.display = 'none';
+    }
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    if (certificateImages.length <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        return;
+    }
+    
+    prevBtn.style.display = 'inline-flex';
+    nextBtn.style.display = 'inline-flex';
+    
+    prevBtn.disabled = currentImageIndex === 0;
+    nextBtn.disabled = currentImageIndex === certificateImages.length - 1;
+}
+
+function toggleImageZoom(img) {
+    if (img.style.transform === 'scale(1.5)') {
+        img.style.transform = 'scale(1)';
+        img.style.cursor = 'zoom-in';
+    } else {
+        img.style.transform = 'scale(1.5)';
+        img.style.cursor = 'zoom-out';
+    }
+    img.style.transition = 'transform 0.3s ease';
+}
