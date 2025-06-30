@@ -3,10 +3,32 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php';
-
-// Set response header
+// Set response header first
 header('Content-Type: application/json');
+
+// CORS headers for deployment
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// Check if composer autoload exists
+if (!file_exists('vendor/autoload.php')) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Server configuration error. Please contact support.',
+        'debug' => 'Composer dependencies not found'
+    ]);
+    exit;
+}
+
+require 'vendor/autoload.php';
 
 // Enable error reporting for debugging (remove in production)
 if (isset($_GET['debug'])) {
@@ -22,12 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Get form data
-$firstName = trim($_POST['firstName'] ?? '');
-$lastName = trim($_POST['lastName'] ?? '');
-$email = trim($_POST['email'] ?? '');
-$subject = trim($_POST['subject'] ?? '');
-$message = trim($_POST['message'] ?? '');
+// Get form data with better sanitization
+$firstName = trim(filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRING) ?? '');
+$lastName = trim(filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING) ?? '');
+$email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '');
+$subject = trim(filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING) ?? '');
+$message = trim(filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING) ?? '');
 
 // Validate required fields
 if (empty($firstName) || empty($lastName) || empty($email) || empty($subject) || empty($message)) {
@@ -43,17 +65,49 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+// Rate limiting (simple protection)
+session_start();
+$now = time();
+$lastSubmission = $_SESSION['last_form_submission'] ?? 0;
+if ($now - $lastSubmission < 30) { // 30 seconds cooldown
+    http_response_code(429);
+    echo json_encode(['success' => false, 'message' => 'Please wait before sending another message']);
+    exit;
+}
+$_SESSION['last_form_submission'] = $now;
+
 try {
-    // Load environment variables
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-    
-    // Verify required environment variables are loaded
-    $requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_FROM_EMAIL', 'RECIPIENT_EMAIL'];
-    foreach ($requiredEnvVars as $var) {
-        if (!isset($_ENV[$var]) || empty($_ENV[$var])) {
-            throw new Exception("Required environment variable $var is not set");
+    // Try to load environment variables
+    $envLoaded = false;
+    if (file_exists('.env')) {
+        try {
+            $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+            $dotenv->load();
+            $envLoaded = true;
+        } catch (Exception $e) {
+            // Environment file exists but couldn't be loaded
+            error_log('Environment file loading failed: ' . $e->getMessage());
         }
+    }
+    
+    // Fallback configuration if .env is not available
+    $smtpHost = $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+    $smtpPort = $_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?: 587;
+    $smtpUsername = $_ENV['SMTP_USERNAME'] ?? getenv('SMTP_USERNAME');
+    $smtpPassword = $_ENV['SMTP_PASSWORD'] ?? getenv('SMTP_PASSWORD');
+    $fromEmail = $_ENV['FROM_EMAIL'] ?? getenv('FROM_EMAIL') ?: $smtpUsername;
+    $fromName = $_ENV['FROM_NAME'] ?? getenv('FROM_NAME') ?: 'Portfolio Contact Form';
+    $toEmail = $_ENV['TO_EMAIL'] ?? getenv('TO_EMAIL') ?: 'gatdulajastine@gmail.com';
+    
+    // Check if essential credentials are available
+    if (empty($smtpUsername) || empty($smtpPassword)) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Server configuration error. Please contact support.',
+            'debug' => 'SMTP credentials not configured'
+        ]);
+        exit;
     }
     
     // Create PHPMailer instances
@@ -61,15 +115,24 @@ try {
     $mailToVisitor = new PHPMailer(true);
     
     // SMTP configuration for both emails
-    $smtpConfig = function($mail) {
+    $smtpConfig = function($mail) use ($smtpHost, $smtpPort, $smtpUsername, $smtpPassword) {
         $mail->isSMTP();
-        $mail->Host = $_ENV['SMTP_HOST'];
+        $mail->Host = $smtpHost;
         $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['SMTP_USERNAME'];
-        $mail->Password = $_ENV['SMTP_PASSWORD'];
+        $mail->Username = $smtpUsername;
+        $mail->Password = $smtpPassword;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = $_ENV['SMTP_PORT'];
+        $mail->Port = $smtpPort;
         $mail->CharSet = 'UTF-8';
+        
+        // Optional: Disable SSL verification for some hosting providers
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
     };
     
     // Configure SMTP for both emails
@@ -77,8 +140,8 @@ try {
     $smtpConfig($mailToVisitor);
     
     // Email 1: Send visitor's message to recipient
-    $mailToMe->setFrom($_ENV['SMTP_FROM_EMAIL'], $_ENV['SMTP_FROM_NAME']);
-    $mailToMe->addAddress($_ENV['RECIPIENT_EMAIL'], $_ENV['RECIPIENT_NAME']);
+    $mailToMe->setFrom($fromEmail, $fromName);
+    $mailToMe->addAddress($toEmail, 'Jastine Gatdula');
     $mailToMe->addReplyTo($email, $firstName . ' ' . $lastName);
     
     $mailToMe->isHTML(true);
@@ -132,7 +195,7 @@ try {
     $mailToMe->Body = $messageToMe;
     
     // Email 2: Send confirmation to visitor
-    $mailToVisitor->setFrom($_ENV['SMTP_FROM_EMAIL'], $_ENV['RECIPIENT_NAME']);
+    $mailToVisitor->setFrom($fromEmail, 'Jastine Gatdula');
     $mailToVisitor->addAddress($email, $firstName . ' ' . $lastName);
     
     $mailToVisitor->isHTML(true);

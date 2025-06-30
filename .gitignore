@@ -13,6 +13,15 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# Test files (for development only)
+test_*.php
+debug_*.php
+test_*.html
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 # IDE files
 .vscode/
 .idea/
