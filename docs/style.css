@@ -9,61 +9,118 @@
     --text-light: #64748B;
 }
 
-/* Dark Theme Global Styles */
+/* Modern Dark Theme Global Styles */
 body {
-    background-color: #111827;
-    color: #F9FAFB;
+    background-color: #0f172a;
+    color: #f1f5f9;
 }
 
-/* Section Background Overrides for Dark Theme */
-section {
-    background-color: #111827 !important;
+/* Section Background Overrides - Modern Dark Theme */
+/* Apply uniform modern dark background to all sections except home */
+section:not(#home) {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    position: relative;
 }
 
-section:nth-child(even) {
-    background-color: #1F2937 !important;
+/* Add subtle texture overlay to non-hero sections */
+section:not(#home)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 49%, rgba(148, 163, 184, 0.01) 50%, transparent 51%);
+    background-size: 300px 300px, 200px 200px, 50px 50px;
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* Update specific sections */
-#about { background-color: #1F2937 !important; }
-#experience { background-color: #111827 !important; }
-#projects { background-color: #1F2937 !important; }
-#skills { background-color: #111827 !important; }
-#education { background-color: #1F2937 !important; }
-#github-activity { background-color: #111827 !important; }
-#contact { background-color: #1F2937 !important; }
+/* Ensure content is above the texture overlay */
+section:not(#home) > * {
+    position: relative;
+    z-index: 1;
+}
 
-/* Text Color Updates */
-.text-gray-900 { color: #F9FAFB !important; }
-.text-gray-700 { color: #D1D5DB !important; }
-.text-gray-600 { color: #9CA3AF !important; }
-.text-gray-500 { color: #6B7280 !important; }
+/* Specific section styling for consistency */
+#about, #experience, #projects, #skills, #services, #education, #github-activity, #contact {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    padding: 5rem 0;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+}
 
-/* Card and Component Updates */
+/* Text Color Updates for Dark Theme */
+.text-gray-900 { color: #f1f5f9 !important; }
+.text-gray-700 { color: #cbd5e1 !important; }
+.text-gray-600 { color: #94a3b8 !important; }
+.text-gray-500 { color: #64748b !important; }
+.text-gray-300 { color: #cbd5e1 !important; }
+.text-gray-100 { color: #f1f5f9 !important; }
+
+/* Card and Component Updates for Dark Theme */
 .bg-white {
-    background-color: #374151 !important;
-    border: 1px solid #4B5563;
+    background: linear-gradient(145deg, #1e293b, #334155) !important;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.3),
+        0 4px 6px -2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(148, 163, 184, 0.1);
 }
 
 .bg-gray-50 {
-    background-color: #374151 !important;
-    border: 1px solid #4B5563;
+    background: linear-gradient(145deg, #1e293b, #334155) !important;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.3),
+        0 4px 6px -2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(148, 163, 184, 0.1);
+}
+
+.bg-gray-800 {
+    background: linear-gradient(145deg, #1e293b, #334155) !important;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.3),
+        0 4px 6px -2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(148, 163, 184, 0.1);
 }
 
 .bg-blue-50 {
-    background-color: #1E3A8A !important;
+    background: linear-gradient(145deg, #1e3a8a, #3730a3) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .bg-gradient-to-r {
-    background: linear-gradient(to right, #1F2937, #111827) !important;
+    background: linear-gradient(to right, #0f172a, #1e293b) !important;
 }
 
 /* Navigation Dark Theme */
 #navbar {
-    background-color: rgba(17, 24, 39, 0.95) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid #374151;
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        0 2px 4px -1px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(148, 163, 184, 0.1);
 }
+
+/* Navigation text colors for dark theme */
+#navbar .text-gray-100 { color: #f1f5f9 !important; }
+#navbar .text-gray-300 { color: #cbd5e1 !important; }
+#navbar .hover\\:text-blue-400:hover { color: #60a5fa !important; }
+#navbar .bg-gray-800 { background: linear-gradient(145deg, #334155, #475569) !important; }
+#navbar .hover\\:bg-gray-700:hover { background: linear-gradient(145deg, #475569, #64748b) !important; }
+#navbar .text-gray-300 { color: #cbd5e1 !important; }
+#navbar .hover\\:text-gray-100:hover { color: #f1f5f9 !important; }
+#navbar .text-gray-900 { color: #f1f5f9 !important; }
+#navbar .text-gray-700 { color: #cbd5e1 !important; }
+#navbar .hover\\:text-blue-600:hover { color: #60a5fa !important; }
+#navbar .bg-gray-100 { background: linear-gradient(145deg, #334155, #475569) !important; }
+#navbar .hover\\:bg-gray-200:hover { background: linear-gradient(145deg, #475569, #64748b) !important; }
 
 /* Button Updates */
 .bg-blue-600 {
@@ -74,16 +131,28 @@ section:nth-child(even) {
     background-color: #1D4ED8 !important;
 }
 
-/* Input and Form Updates */
+/* Input and Form Updates for Dark Theme */
 input, textarea, select {
-    background-color: #374151 !important;
-    border-color: #4B5563 !important;
-    color: #F9FAFB !important;
+    background: linear-gradient(145deg, #1e293b, #334155) !important;
+    border: 1px solid rgba(71, 85, 105, 0.5) !important;
+    color: #f1f5f9 !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 input:focus, textarea:focus, select:focus {
-    border-color: #3B82F6 !important;
-    outline: 2px solid #3B82F6 !important;
+    border-color: #60a5fa !important;
+    outline: none !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(96, 165, 250, 0.2),
+        0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder text styling for dark theme */
+input::placeholder, textarea::placeholder {
+    color: #64748b !important;
 }
 
 /* Tech-themed Hero Background */
@@ -163,11 +232,7 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-/* Navigation Styles */
-#navbar {
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.95);
-}
+/* Navigation Styles - Updated for Light Theme */
 
 .nav-link {
     position: relative;
@@ -233,6 +298,69 @@ body {
 .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Enhanced Section Styling for Visual Separation - Dark Theme */
+section:not(#home) {
+    border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Add visual depth to section dividers - Dark Theme */
+section:not(#home):not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(96, 165, 250, 0.6), 
+        rgba(168, 85, 247, 0.4), 
+        transparent
+    );
+    opacity: 0.7;
+    z-index: 2;
+}
+
+/* Enhanced card styling with better shadows and hover effects - Dark Theme */
+.bg-white, .bg-gray-50, .bg-gray-800 {
+    border-radius: 16px !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    backdrop-filter: blur(10px);
+}
+
+.bg-white:hover, .bg-gray-50:hover, .bg-gray-800:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 8px 16px -4px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(148, 163, 184, 0.2) !important;
+    border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+/* Improved section headers */
+section h2 {
+    position: relative;
+    display: inline-block;
+}
+
+/* Add subtle animation to section headers */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeInUp 0.8s ease-out forwards;
 }
 
 /* Cards and Hover Effects */
@@ -636,8 +764,9 @@ textarea:focus {
 /* Reduced Transparency */
 @media (prefers-reduced-transparency: reduce) {
     #navbar {
-        background-color: white;
-        backdrop-filter: none;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 }
 
@@ -809,4 +938,245 @@ textarea:focus {
 .hero-tech-bg .relative {
     position: relative;
     z-index: 10;
+}
+
+/* Additional Modern Dark Theme Enhancements */
+
+/* Professional glassmorphism effect for cards */
+.bg-white, .bg-gray-50, .bg-gray-800 {
+    background: rgba(30, 41, 59, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+/* Advanced glow effects on hover */
+.bg-white:hover, .bg-gray-50:hover, .bg-gray-800:hover {
+    background: rgba(30, 41, 59, 0.9) !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.6),
+        0 8px 16px -4px rgba(59, 130, 246, 0.1),
+        0 0 0 1px rgba(96, 165, 250, 0.1),
+        inset 0 1px 0 rgba(148, 163, 184, 0.1) !important;
+}
+
+/* Enhanced button styling */
+.bg-blue-600 {
+    background: linear-gradient(135deg, #3b82f6, #1e40af) !important;
+    box-shadow: 
+        0 4px 14px 0 rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.bg-blue-600:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    box-shadow: 
+        0 8px 25px 0 rgba(59, 130, 246, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Subtle pulse animation for important elements */
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+    }
+    50% { 
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+    }
+}
+
+/* Enhanced text readability with better contrast */
+.text-gray-900 { 
+    color: #f8fafc !important; 
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Professional code-like font for technical sections */
+.font-mono {
+    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
+    font-variant-ligatures: normal;
+}
+
+/* Smooth scroll with better easing */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+}
+
+/* Enhanced focus states for accessibility */
+.nav-link:focus, 
+button:focus, 
+input:focus, 
+textarea:focus {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+}
+
+/* Glassmorphism Skill Tooltip System */
+.skill-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 16px;
+    padding: 16px 20px;
+    min-width: 280px;
+    max-width: 320px;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.6),
+        0 8px 16px -4px rgba(59, 130, 246, 0.1),
+        0 0 0 1px rgba(96, 165, 250, 0.05),
+        inset 0 1px 0 rgba(148, 163, 184, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.skill-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: rgba(30, 41, 59, 0.95);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.skill-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: rgba(148, 163, 184, 0.1);
+    margin-top: -1px;
+}
+
+.skill-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-20px);
+}
+
+.skill-tooltip h4 {
+    color: #f8fafc;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.skill-tooltip p {
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+}
+
+.skill-tooltip .skill-level {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.skill-tooltip .skill-level-label {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.skill-tooltip .skill-level-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(71, 85, 105, 0.5);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.skill-tooltip .skill-level-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    border-radius: 2px;
+    transition: width 0.6s ease-out;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
+.skill-tooltip .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.skill-tooltip .skill-tag {
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* Enhanced skill card hover effects */
+.skill-card {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.skill-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 8px 16px -4px rgba(59, 130, 246, 0.2),
+        0 0 0 1px rgba(96, 165, 250, 0.1);
+}
+
+.skill-card:hover .skill-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-20px);
+}
+
+/* Pulse animation for skill cards */
+@keyframes skill-pulse {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+    }
+    50% { 
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+    }
+}
+
+.skill-card:hover .icon {
+    animation: skill-pulse 2s infinite;
+}
+
+/* Responsive tooltip adjustments */
+@media (max-width: 768px) {
+    .skill-tooltip {
+        min-width: 250px;
+        max-width: 280px;
+        padding: 14px 16px;
+        font-size: 13px;
+    }
+    
+    .skill-tooltip h4 {
+        font-size: 15px;
+    }
+    
+    .skill-tooltip p {
+        font-size: 13px;
+    }
 }
