@@ -7,6 +7,8 @@ function portfolioApp() {
         darkMode: false,
         mobileMenuOpen: false,
         contactModalOpen: false,
+        serviceModalOpen: false,
+        currentService: {},
         
         // Contact Form
         contactForm: {
@@ -124,6 +126,208 @@ function portfolioApp() {
                 // Simulate successful send for UI feedback
                 return Promise.resolve({ success: true });
             }
+        },
+        
+        // Service Modal
+        openServiceModal(serviceId) {
+            this.currentService = this.getServiceDetails(serviceId);
+            this.serviceModalOpen = true;
+            document.body.style.overflow = 'hidden';
+        },
+        
+        closeServiceModal() {
+            this.serviceModalOpen = false;
+            document.body.style.overflow = 'auto';
+            this.currentService = {};
+        },
+        
+        getServiceDetails(serviceId) {
+            const services = {
+                'computer-repair': {
+                    title: 'Computer Repair & Setup',
+                    icon: 'fas fa-tools',
+                    gradient: 'bg-gradient-to-r from-blue-500 to-blue-600',
+                    description: 'Professional computer repair, optimization, and setup services to get your systems running at peak performance. From hardware diagnostics to complete system overhauls, I provide comprehensive solutions for all your computing needs.',
+                    includes: [
+                        'Complete hardware diagnostics and troubleshooting',
+                        'Operating system installation (Windows, Linux, macOS)',
+                        'System formatting and clean installation',
+                        'Driver installation and updates',
+                        'Software installation and configuration',
+                        'Performance optimization and tuning',
+                        'Virus removal and malware protection setup',
+                        'Data backup before any major changes',
+                        'Basic hardware upgrades (RAM, storage)',
+                        'Post-service support and guidance'
+                    ],
+                    timeline: '1-3 days depending on complexity',
+                    pricing: 'Starting from ₱500 - Varies by service',
+                    process: [
+                        'Initial diagnosis and assessment',
+                        'Provide detailed quote and timeline',
+                        'Backup important data if needed',
+                        'Perform repair/installation services',
+                        'System testing and optimization',
+                        'Delivery with full documentation'
+                    ]
+                },
+                'data-recovery': {
+                    title: 'Data Recovery Services',
+                    icon: 'fas fa-database',
+                    gradient: 'bg-gradient-to-r from-green-500 to-green-600',
+                    description: 'Specialized data recovery services for deleted files, corrupted drives, and damaged storage devices. Using professional tools and techniques to recover your valuable data from various storage media.',
+                    includes: [
+                        'Deleted file recovery from hard drives',
+                        'USB flash drive data recovery',
+                        'SD card and memory card recovery',
+                        'Corrupted drive repair and data extraction',
+                        'Partition recovery and repair',
+                        'Photo and video recovery',
+                        'Document and file recovery',
+                        'Drive formatting recovery',
+                        'RAID array data recovery (basic)',
+                        'Data integrity verification'
+                    ],
+                    timeline: '1-5 days depending on damage severity',
+                    pricing: '₱300-₱2000 based on complexity',
+                    successRates: {
+                        'Accidental deletion': '85-95%',
+                        'Formatted drives': '70-90%',
+                        'Corrupted file systems': '60-85%',
+                        'Physical damage (minor)': '40-70%',
+                        'Severely damaged drives': '10-40%'
+                    },
+                    risks: [
+                        'Further data loss if recovery is attempted on severely damaged drives',
+                        'Potential permanent damage to storage device during recovery process',
+                        'Some recovered files may be partially corrupted or incomplete',
+                        'Recovery attempts may void manufacturer warranty',
+                        'Time-sensitive - delay reduces recovery success rate'
+                    ],
+                    process: [
+                        'Device assessment and damage evaluation',
+                        'Recovery feasibility analysis',
+                        'Provide quote and expected recovery rate',
+                        'Create disk image for safe recovery',
+                        'Execute recovery procedures',
+                        'Verify recovered data and deliver'
+                    ]
+                },
+                'web-development': {
+                    title: 'Custom Website Development',
+                    icon: 'fas fa-globe',
+                    gradient: 'bg-gradient-to-r from-purple-500 to-purple-600',
+                    description: 'Professional website development services using modern technologies like PHP and React. Specializing in custom websites, school management systems, and business applications.',
+                    includes: [
+                        'Custom website design and development',
+                        'Responsive design for all devices',
+                        'School management systems',
+                        'Student information systems',
+                        'E-commerce websites',
+                        'Content management systems (CMS)',
+                        'Database design and integration',
+                        'User authentication and security',
+                        'SEO optimization basics',
+                        'Basic hosting setup guidance'
+                    ],
+                    timeline: '2-8 weeks depending on project scope',
+                    pricing: '₱5,000-₱50,000+ based on requirements',
+                    process: [
+                        'Requirements gathering and analysis',
+                        'Design mockups and wireframes',
+                        'Development and coding',
+                        'Testing and quality assurance',
+                        'Client review and revisions',
+                        'Deployment and training'
+                    ]
+                },
+                'programming-tutoring': {
+                    title: 'Programming Tutoring',
+                    icon: 'fas fa-graduation-cap',
+                    gradient: 'bg-gradient-to-r from-orange-500 to-orange-600',
+                    description: 'Personalized programming instruction for students and professionals. Learn programming fundamentals, advanced concepts, and practical application development with hands-on guidance.',
+                    includes: [
+                        'Java programming (OOP, Data Structures)',
+                        'Python programming (Basics to Advanced)',
+                        'Web development (HTML, CSS, JavaScript)',
+                        'Database programming (SQL, MySQL)',
+                        'Algorithm and problem-solving techniques',
+                        'Code review and best practices',
+                        'Project-based learning',
+                        'Assignment and homework help',
+                        'Interview preparation guidance',
+                        'Customized learning materials'
+                    ],
+                    timeline: 'Flexible scheduling, 1-2 hours per session',
+                    pricing: '₱300-₱500 per hour',
+                    process: [
+                        'Assess current skill level and goals',
+                        'Create personalized learning plan',
+                        'Conduct interactive coding sessions',
+                        'Provide practice exercises and projects',
+                        'Regular progress evaluation',
+                        'Ongoing support and mentorship'
+                    ]
+                },
+                'educational-materials': {
+                    title: 'Educational Materials Creation',
+                    icon: 'fas fa-book',
+                    gradient: 'bg-gradient-to-r from-teal-500 to-teal-600',
+                    description: 'Professional creation of educational materials including PowerPoint presentations, worksheets, learning modules, and interactive content for teachers and students.',
+                    includes: [
+                        'PowerPoint presentations with animations',
+                        'Interactive learning modules',
+                        'Worksheets and activity sheets',
+                        'Quiz and assessment materials',
+                        'Lesson plan templates',
+                        'Visual aids and infographics',
+                        'Student handouts and guides',
+                        'Course materials and syllabi',
+                        'Educational posters and charts',
+                        'Digital learning resources'
+                    ],
+                    timeline: '3-7 days per project',
+                    pricing: '₱200-₱1,500 per material set',
+                    process: [
+                        'Understand subject and target audience',
+                        'Create content outline and structure',
+                        'Design visually appealing materials',
+                        'Review and incorporate feedback',
+                        'Finalize and deliver materials',
+                        'Provide usage instructions'
+                    ]
+                },
+                'document-creation': {
+                    title: 'Document Creation & Formatting',
+                    icon: 'fas fa-file-alt',
+                    gradient: 'bg-gradient-to-r from-red-500 to-red-600',
+                    description: 'Professional document creation and formatting services including resumes, business letters, reports, and official documents with polished presentation.',
+                    includes: [
+                        'Professional resume creation and formatting',
+                        'Cover letters and application letters',
+                        'Business proposals and reports',
+                        'Academic papers and theses formatting',
+                        'Official letters and documents',
+                        'Brochures and flyers',
+                        'Certificates and awards',
+                        'Letterheads and templates',
+                        'Document conversion (PDF, Word, etc.)',
+                        'Proofreading and editing services'
+                    ],
+                    timeline: '1-3 days per document',
+                    pricing: '₱150-₱800 per document',
+                    process: [
+                        'Gather content and requirements',
+                        'Choose appropriate template/design',
+                        'Create and format document',
+                        'Review and make revisions',
+                        'Final proofreading and quality check',
+                        'Deliver in requested formats'
+                    ]
+                }
+            };
+            
+            return services[serviceId] || {};
         },
         
         // Smooth Scrolling
@@ -704,6 +908,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const app = Alpine.raw(document.querySelector('[x-data="portfolioApp()"]').__x.$data);
             if (app.contactModalOpen) {
                 app.closeContactModal();
+            }
+            if (app.serviceModalOpen) {
+                app.closeServiceModal();
             }
             if (app.mobileMenuOpen) {
                 app.mobileMenuOpen = false;
