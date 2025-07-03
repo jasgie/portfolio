@@ -1,0 +1,370 @@
+===============================================================
+DATA RECOVERY CLIENT FORM - CREATION INSTRUCTIONS
+===============================================================
+Created: July 3, 2025
+For: Jastine Maderable Gatdula IT Services
+Location: Surallah, South Cotabato
+
+===============================================================
+DOCUMENT SETUP INSTRUCTIONS
+===============================================================
+
+1. DOCUMENT SPECIFICATIONS:
+   - Paper Size: Letter (8.5" x 11") or A4
+   - Orientation: Portrait
+   - Margins: 1 inch all around
+   - Font: Arial or Times New Roman, 10-12pt
+   - Line Spacing: Single
+   - Pages: 2-3 pages recommended
+
+2. SOFTWARE RECOMMENDATIONS:
+   - Microsoft Word (.docx)
+   - Google Docs
+   - LibreOffice Writer
+   - Any word processor with form capabilities
+
+===============================================================
+FORM CONTENT STRUCTURE
+===============================================================
+
+HEADER SECTION:
+--------------
+[Include your business logo if available]
+Title: "DATA RECOVERY SERVICE REQUEST FORM"
+Subtitle: "Jastine Maderable Gatdula - IT Services"
+Contact Info: Phone: [Your Number] | Email: gatdulajastine@gmail.com
+Address: Surallah, South Cotabato, Philippines
+Form Date Field: Date: _______________
+
+SECTION 1: CLIENT INFORMATION
+-----------------------------
+Full Name: _________________________________ (30 characters)
+Contact Number: ____________________________ (20 characters)
+Email Address: _____________________________ (30 characters)
+Complete Address: ________________________________________________________
+                  ________________________________________________________
+Emergency Contact Person: _____________________ Phone: __________________
+Preferred Contact Method: □ Phone □ Email □ Text Message □ WhatsApp
+
+SECTION 2: DEVICE INFORMATION
+-----------------------------
+Device Type: □ USB Flash Drive □ External Hard Drive □ Internal Hard Drive 
+            □ SD Card □ MicroSD Card □ SSD Drive □ Memory Stick
+            □ Other: _________________________________________________
+
+Brand/Manufacturer: ____________________________
+Model Number: __________________________________
+Storage Capacity: __________________ (GB/TB)
+Device Color: ___________________________________
+Operating System Last Used: □ Windows 10/11 □ Windows 7/8 □ macOS 
+                           □ Linux □ Android □ iOS □ Other: ____________
+Approximate Device Age: _________________________
+Purchase Location: ______________________________
+
+SECTION 3: PROBLEM DESCRIPTION
+------------------------------
+Primary Issue (Check all that apply):
+□ Accidentally deleted important files/folders
+□ Drive was formatted (intentionally or accidentally)
+□ File system corruption/errors
+□ Physical damage to device (drops, water, etc.)
+□ Device not recognized by computer
+□ Files appear corrupted or won't open
+□ Virus/malware infection and cleanup
+□ Partition table corruption
+□ Bad sectors on drive
+□ Other problem: __________________________________________
+
+Detailed Problem Description:
+When did this problem first occur? ____________________________
+What were you doing when it happened? _________________________
+_____________________________________________________________
+
+Any error messages displayed? __________________________________
+_____________________________________________________________
+
+Previous working condition: ____________________________________
+
+SECTION 4: DATA PRIORITY & IMPORTANCE
+-------------------------------------
+Most Critical Files/Folders to Recover:
+Priority 1 (MUST HAVE): ____________________________________
+Priority 2 (VERY IMPORTANT): _______________________________
+Priority 3 (IMPORTANT): ____________________________________
+
+File Types Most Needed:
+□ Text Documents (Word, PDF, txt files)
+□ Spreadsheets (Excel, accounting files)
+□ Photos/Images (family, work, events)
+□ Videos (personal, work projects)
+□ Music/Audio files
+□ Work-related files
+□ School/Educational materials
+□ Database files
+□ Email files and contacts
+□ Other specific files: ___________________________________
+
+Estimated total size of important data: ____________________
+
+SECTION 5: PREVIOUS RECOVERY ATTEMPTS
+------------------------------------
+Have you attempted any recovery yourself? □ Yes □ No
+
+If YES, what did you try?
+□ Recuva software
+□ Disk Drill
+□ PhotoRec
+□ TestDisk
+□ Other recovery software: ________________________________
+□ System Restore
+□ Checked Recycle Bin/Trash
+□ Other methods: ________________________________________
+
+Results of previous attempts: ________________________________
+_____________________________________________________________
+
+Has any other technician/service worked on this device? □ Yes □ No
+If YES, describe what was done: ______________________________
+_____________________________________________________________
+
+SECTION 6: SERVICE AGREEMENT & RISK ACKNOWLEDGMENT
+--------------------------------------------------
+By signing below, I acknowledge and understand:
+
+□ Data recovery success rates vary significantly (10-95%) depending on:
+  - Type and extent of damage
+  - Time elapsed since data loss
+  - Previous recovery attempts
+  - Physical condition of storage device
+
+□ Potential risks during recovery process include:
+  - Further data loss may occur
+  - Physical damage to device may worsen
+  - Some recovered files may be partially corrupted
+  - Device may become completely unusable
+  - Manufacturer warranty may be voided
+
+□ Financial obligations:
+  - Diagnostic fee of ₱_________ is required upfront (non-refundable)
+  - This covers initial assessment and feasibility analysis
+  - Additional recovery costs will be quoted after diagnosis
+  - Payment required regardless of recovery success rate
+
+□ Timeline expectations:
+  - Initial assessment: 24-48 hours
+  - Recovery process: _____ to _____ days (estimated)
+  - Client will be notified of any delays
+
+□ No guarantee of 100% data recovery success
+□ I will immediately backup any recovered data upon receipt
+
+SECTION 7: SERVICE AUTHORIZATION
+-------------------------------
+□ I authorize Jastine Maderable Gatdula to proceed with diagnostic assessment
+□ I authorize recovery attempts after receiving cost estimate
+□ I have read and understood all terms, risks, and conditions
+□ I agree to the diagnostic fee and payment terms
+
+Estimated Service Costs:
+Initial Diagnostic Fee: ₱ _________ (Required)
+Estimated Recovery Cost Range: ₱ _________ to ₱ _________
+Total Estimated Cost: ₱ _________ to ₱ _________
+
+Client Name (Print): ____________________________________
+Client Signature: _________________________ Date: __________
+
+SECTION 8: TECHNICIAN ASSESSMENT (For Internal Use)
+--------------------------------------------------
+Device Received Date: _______________
+Received by: ______________________
+
+Physical Condition Assessment:
+□ Excellent (no visible damage)
+□ Good (minor cosmetic issues)
+□ Fair (some damage but functional)
+□ Poor (significant damage)
+□ Severely Damaged (may not be recoverable)
+
+Visible Physical Damage:
+□ Bent or broken USB connector
+□ Cracked case/housing
+□ Liquid damage indicators
+□ Burn marks or heat damage
+□ Loose connections
+□ None visible
+
+Initial Diagnostic Results:
+Device Recognition: □ Recognized □ Partially Recognized □ Not Recognized
+File System Status: □ Intact □ Damaged □ Corrupted □ Missing
+Boot Sector: □ Good □ Damaged □ Missing
+
+Preliminary Assessment:
+□ High probability of successful recovery (80-95%)
+□ Moderate probability of recovery (50-79%)
+□ Low probability of recovery (20-49%)
+□ Very low probability of recovery (5-19%)
+□ Recovery not recommended (device too damaged)
+
+Recommended Recovery Method:
+□ Standard software-based recovery
+□ Advanced recovery techniques required
+□ Hardware repair needed first
+□ Professional clean room service required
+□ Recovery not feasible
+
+Technical Notes:
+_____________________________________________________________
+_____________________________________________________________
+_____________________________________________________________
+
+Technician Name: ____________________
+Technician Signature: _________________ Date: ______________
+
+SECTION 9: SERVICE COMPLETION
+-----------------------------
+Service Completed Date: _______________
+
+Recovery Results:
+□ Successful recovery (80-100% of requested files)
+□ Partial recovery (50-79% of requested files)
+□ Limited recovery (20-49% of requested files)
+□ Minimal recovery (5-19% of requested files)
+□ No recovery possible (0-4% of requested files)
+
+Specific Results:
+Total files recovered: _____________________
+File types recovered: ______________________
+Files not recoverable: ____________________
+Overall success rate: _____%
+
+Delivery Method:
+□ New USB drive (included in cost)
+□ Client's replacement device
+□ Cloud storage link
+□ DVD/CD media
+□ Other: ___________________________________
+
+Final Service Cost: ₱ _________
+Payment Method: □ Cash □ Bank Transfer □ GCash □ Other: ____________
+Payment Status: □ Paid in Full □ Partial Payment □ Payment Pending
+
+Client Satisfaction Survey:
+Technical service quality: □ Excellent □ Good □ Fair □ Poor
+Communication: □ Excellent □ Good □ Fair □ Poor
+Timeline adherence: □ Excellent □ Good □ Fair □ Poor
+Overall experience: □ Excellent □ Good □ Fair □ Poor
+
+Would you recommend our services? □ Yes □ No
+Comments/Suggestions: ____________________________________
+_____________________________________________________
+
+Additional Services Provided:
+□ Device health check
+□ Data backup consultation
+□ Computer maintenance tips
+□ Other: ____________________________________________
+
+Client Pickup Information:
+Pickup Date: _______________
+Picked up by: ______________________ (Name)
+Relationship to client: ________________
+ID presented: □ Yes □ No  Type: ___________
+Signature: _________________________ Date: ______________
+
+===============================================================
+PRINTING AND FORMATTING INSTRUCTIONS
+===============================================================
+
+1. FORM DESIGN TIPS:
+   - Use checkboxes (□) for multiple choice options
+   - Leave adequate space for handwritten responses
+   - Use underlines for fill-in-the-blank sections
+   - Bold section headers for easy reading
+   - Consider using tables for organized layout
+
+2. PRINTING SPECIFICATIONS:
+   - Print on quality white paper (at least 20lb weight)
+   - Consider light gray or blue form background
+   - Use black ink for best photocopying
+   - Print extra copies for your records
+
+3. ORGANIZATION TIPS:
+   - Number each form for tracking
+   - Create a filing system by date or client name
+   - Scan completed forms for digital backup
+   - Store originals in secure, fireproof location
+
+4. LEGAL CONSIDERATIONS:
+   - Have forms reviewed by legal advisor if needed
+   - Include business license number if required
+   - Add privacy policy statement
+   - Consider liability insurance information
+
+===============================================================
+FORM USAGE PROCEDURES
+===============================================================
+
+1. BEFORE CLIENT MEETING:
+   - Have blank forms ready
+   - Ensure pens are working
+   - Prepare price list reference
+   - Review current service capabilities
+
+2. DURING CLIENT CONSULTATION:
+   - Complete form together with client
+   - Explain each section clearly
+   - Ensure client understands risks
+   - Answer all questions before signing
+
+3. AFTER FORM COMPLETION:
+   - Make copy for client
+   - Store original securely
+   - Enter client info into digital system
+   - Begin diagnostic process
+
+4. RECORD KEEPING:
+   - Maintain forms for minimum 2 years
+   - Track success rates for improvement
+   - Use data for marketing testimonials
+   - Monitor common problem patterns
+
+===============================================================
+CUSTOMIZATION NOTES
+===============================================================
+
+You may want to customize this form by:
+- Adding your business logo and branding
+- Adjusting pricing based on your current rates
+- Including specific software tools you use
+- Adding local regulatory requirements
+- Translating sections to local language if needed
+- Including QR code for digital contact info
+
+===============================================================
+DIGITAL VERSION OPTION
+===============================================================
+
+Consider creating a digital version using:
+- Google Forms (free, automatic responses)
+- Microsoft Forms (integration with Office)
+- Adobe Acrobat (professional PDF forms)
+- TypeForm (user-friendly interface)
+
+Benefits of digital forms:
+- Automatic data collection
+- Reduced paper usage
+- Easy client sharing via email/link
+- Automatic backup of responses
+- Professional appearance
+
+===============================================================
+END OF INSTRUCTIONS
+===============================================================
+
+For questions about implementing this form, contact:
+Jastine Maderable Gatdula
+Email: gatdulajastine@gmail.com
+Location: Surallah, South Cotabato
+
+Last Updated: July 3, 2025
+Version: 1.0
