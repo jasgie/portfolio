@@ -100,17 +100,41 @@ function portfolioApp() {
             }
         },
         
-        // Email sending function
+        // Email sending function using Formspree
         async sendEmail(formData) {
-            // Use mailto link to open default email client
-            const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
-            const body = encodeURIComponent(
-                `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-            );
-            window.open(`mailto:gatdulajastine@gmail.com?subject=${subject}&body=${body}`);
+            const formspreeEndpoint = 'https://formspree.io/f/xeopjbwb';
             
-            // Return success for UI feedback
-            return Promise.resolve({ success: true });
+            try {
+                const response = await fetch(formspreeEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        message: formData.message,
+                        _subject: `Portfolio Contact from ${formData.name}`
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Formspree error:', error);
+                // Fallback to mailto link if Formspree fails
+                const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+                const body = encodeURIComponent(
+                    `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+                );
+                window.open(`mailto:gatdulajastine@gmail.com?subject=${subject}&body=${body}`);
+                throw error;
+            }
         },
         
         // Service Modal
