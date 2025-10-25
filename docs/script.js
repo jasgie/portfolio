@@ -18,6 +18,17 @@ function portfolioApp() {
             sending: false
         },
         
+        // Service Inquiry Form
+        serviceForm: {
+            name: '',
+            email: '',
+            phone: '',
+            service: '',
+            details: '',
+            preferredTimeline: '',
+            sending: false
+        },
+        
         // Initialize
         init() {
             // Check for saved dark mode preference
@@ -140,6 +151,7 @@ function portfolioApp() {
         // Service Modal
         openServiceModal(serviceId) {
             this.currentService = this.getServiceDetails(serviceId);
+            this.serviceForm.service = this.currentService.title;
             this.serviceModalOpen = true;
             document.body.style.overflow = 'hidden';
         },
@@ -148,6 +160,91 @@ function portfolioApp() {
             this.serviceModalOpen = false;
             document.body.style.overflow = 'auto';
             this.currentService = {};
+            this.resetServiceForm();
+        },
+        
+        resetServiceForm() {
+            this.serviceForm = {
+                name: '',
+                email: '',
+                phone: '',
+                service: '',
+                details: '',
+                preferredTimeline: '',
+                sending: false
+            };
+        },
+        
+        // Service Inquiry Form Submission
+        async submitServiceForm() {
+            if (this.serviceForm.sending) return;
+            
+            // Basic validation
+            if (!this.serviceForm.name || !this.serviceForm.email || !this.serviceForm.details) {
+                this.showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            this.serviceForm.sending = true;
+            
+            try {
+                await this.sendServiceInquiry({
+                    name: this.serviceForm.name,
+                    email: this.serviceForm.email,
+                    phone: this.serviceForm.phone,
+                    service: this.serviceForm.service,
+                    details: this.serviceForm.details,
+                    preferredTimeline: this.serviceForm.preferredTimeline
+                });
+                
+                this.showNotification('Service inquiry sent successfully! I\'ll get back to you with a quote soon.', 'success');
+                this.closeServiceModal();
+            } catch (error) {
+                console.error('Error sending service inquiry:', error);
+                this.showNotification('Failed to send inquiry. Please try again.', 'error');
+            } finally {
+                this.serviceForm.sending = false;
+            }
+        },
+        
+        // Service inquiry sending function using Formspree
+        async sendServiceInquiry(formData) {
+            const formspreeEndpoint = 'https://formspree.io/f/xeopjbwb';
+            
+            try {
+                const response = await fetch(formspreeEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone || 'Not provided',
+                        service: formData.service,
+                        details: formData.details,
+                        preferredTimeline: formData.preferredTimeline || 'Not specified',
+                        _subject: `Service Inquiry: ${formData.service} - ${formData.name}`
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Formspree error:', error);
+                // Fallback to mailto link if Formspree fails
+                const subject = encodeURIComponent(`Service Inquiry: ${formData.service}`);
+                const body = encodeURIComponent(
+                    `Service: ${formData.service}\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || 'Not provided'}\nPreferred Timeline: ${formData.preferredTimeline || 'Not specified'}\n\nDetails:\n${formData.details}`
+                );
+                window.open(`mailto:gatdulajastine@gmail.com?subject=${subject}&body=${body}`);
+                throw error;
+            }
         },
         
         getServiceDetails(serviceId) {

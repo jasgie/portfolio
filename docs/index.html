@@ -2006,15 +2006,137 @@
                     </div>
                 </div>
                 
-                <!-- Modal footer -->
-                <div class="flex flex-col sm:flex-row gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
-                    <button @click="openContactModal(); closeServiceModal()" class="flex-1 glass-button px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                        <i class="fas fa-envelope mr-2"></i>
-                        Get Quote
-                    </button>
-                    <button @click="closeServiceModal()" class="flex-1 glass-panel px-6 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300">
-                        Close
-                    </button>
+                <!-- Modal footer - Service Inquiry Form -->
+                <div class="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                        <i class="fas fa-file-alt mr-2 text-blue-500"></i>Request a Quote
+                    </h4>
+                    
+                    <form @submit.prevent="submitServiceForm()" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Name -->
+                            <div>
+                                <label for="service-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Full Name <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="service-name" 
+                                    x-model="serviceForm.name" 
+                                    required 
+                                    class="w-full px-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300" 
+                                    placeholder="Your name"
+                                >
+                            </div>
+                            
+                            <!-- Email -->
+                            <div>
+                                <label for="service-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Email Address <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="service-email" 
+                                    x-model="serviceForm.email" 
+                                    required 
+                                    class="w-full px-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300" 
+                                    placeholder="your.email@example.com"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Phone -->
+                            <div>
+                                <label for="service-phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Phone Number (Optional)
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="service-phone" 
+                                    x-model="serviceForm.phone" 
+                                    class="w-full px-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300" 
+                                    placeholder="+63 XXX XXX XXXX"
+                                >
+                            </div>
+                            
+                            <!-- Preferred Timeline -->
+                            <div>
+                                <label for="service-timeline" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Preferred Timeline
+                                </label>
+                                <select 
+                                    id="service-timeline" 
+                                    x-model="serviceForm.preferredTimeline" 
+                                    class="w-full px-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300"
+                                >
+                                    <option value="">Select timeline</option>
+                                    <option value="Urgent (1-2 days)">Urgent (1-2 days)</option>
+                                    <option value="Normal (3-7 days)">Normal (3-7 days)</option>
+                                    <option value="Flexible (1-2 weeks)">Flexible (1-2 weeks)</option>
+                                    <option value="No rush">No rush</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Service (Auto-filled, read-only) -->
+                        <div>
+                            <label for="service-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Service Requested
+                            </label>
+                            <input 
+                                type="text" 
+                                id="service-type" 
+                                x-model="serviceForm.service" 
+                                readonly 
+                                class="w-full px-4 py-2 rounded-lg border-0 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-not-allowed"
+                            >
+                        </div>
+                        
+                        <!-- Details -->
+                        <div>
+                            <label for="service-details" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Project Details <span class="text-red-500">*</span>
+                            </label>
+                            <textarea 
+                                id="service-details" 
+                                x-model="serviceForm.details" 
+                                required 
+                                rows="4" 
+                                class="w-full px-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300 resize-none" 
+                                placeholder="Please describe what you need help with, including any specific requirements or questions..."
+                            ></textarea>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                The more details you provide, the more accurate quote I can give you.
+                            </p>
+                        </div>
+                        
+                        <!-- Submit Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <button 
+                                type="submit" 
+                                :disabled="serviceForm.sending" 
+                                class="flex-1 glass-button px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                            >
+                                <span x-show="!serviceForm.sending" class="flex items-center justify-center">
+                                    <i class="fas fa-paper-plane mr-2"></i>
+                                    Send Inquiry
+                                </span>
+                                <span x-show="serviceForm.sending" class="flex items-center justify-center">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                                    Sending...
+                                </span>
+                            </button>
+                            <button 
+                                type="button"
+                                @click="closeServiceModal()" 
+                                class="flex-1 glass-panel px-6 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
