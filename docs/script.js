@@ -102,30 +102,15 @@ function portfolioApp() {
         
         // Email sending function
         async sendEmail(formData) {
-            // Try to use the existing PHP endpoint first
-            try {
-                const response = await fetch('send_email.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                if (!response.ok) throw new Error('Server error');
-                
-                return await response.json();
-            } catch (error) {
-                // Fallback to mailto link
-                const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
-                const body = encodeURIComponent(
-                    `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-                );
-                window.open(`mailto:gatdulajastine@gmail.com?subject=${subject}&body=${body}`);
-                
-                // Simulate successful send for UI feedback
-                return Promise.resolve({ success: true });
-            }
+            // Use mailto link to open default email client
+            const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+            const body = encodeURIComponent(
+                `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+            );
+            window.open(`mailto:gatdulajastine@gmail.com?subject=${subject}&body=${body}`);
+            
+            // Return success for UI feedback
+            return Promise.resolve({ success: true });
         },
         
         // Service Modal
@@ -953,6 +938,16 @@ const certificates = {
                 title: 'Certificate Back'
             }
         ]
+    },
+    'codechum-python': {
+        title: 'CodeChum Python Programming 1 Teacher Certification',
+        type: 'pdf',
+        pdfUrl: 'https://storage.googleapis.com/codechum-certificates/prod/certification-1298-CodeChum%20Python%20Programming%201%20Teacher%20Certification/user-148240/JastineGatdula.pdf?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=cloud-storage%40code-chum.iam.gserviceaccount.com%2F20251025%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251025T141243Z&X-Goog-Expires=604800&X-Goog-SignedHeaders=host&X-Goog-Signature=2a58c6fa4ee6a2293aff79ff91cf4d0955f51ee255faadc341ad191d29da5925b9b9abb022a1a8015a798203a613a2c3bc528e3e91fe4360ebefda5e9fbe2ec4b7fe3eaef9c79122bcd6926e079f4a29467bbbfa28f9da910a1f16f2f0144a6c05c0baa69270c971abb8d21245c70a743c5bdbdc8a9d390bead876a7c1640e0b62ec096ae782843c7c12279400d3e694872789e637419b174ba7c449db156bd710a0138120c1fb2e61b9b87faaae96929be4c053ac3f53ba19936afd1dbc6a4cfa73c1566f604098d1ccca03debd00f41e8609029af46ee61bea679f037e1ea199275777aafdff1182a5fc3137cc0b603464972213736d8470bc21078c88bb3a'
+    },
+    'codechum-java': {
+        title: 'CodeChum Java Programming 1 Teacher Certification',
+        type: 'pdf',
+        pdfUrl: 'https://storage.googleapis.com/codechum-certificates/prod/certification-1298-CodeChum%20Python%20Programming%201%20Teacher%20Certification/user-148240/JastineGatdula.pdf?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=cloud-storage%40code-chum.iam.gserviceaccount.com%2F20251025%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251025T140935Z&X-Goog-Expires=604800&X-Goog-SignedHeaders=host&X-Goog-Signature=8a760fa6a968007299539c76560f4af14e700053c374d81d469a910e43164d891e4a20a26d4c426af403d19e852a1b2ae9006115b00a4c17c59079e4a86d18725c839b27135b03f684b2a81e4b5333476f4d4478642120e280399ab9f2fc3ae9a413a8f43a9629036042342975dd1fb465ae74f6fc124792bd68644a666262729291a68765808a723ba890841019e3a2178d54097e9b7edb30acb6f40d5f9811d1c19e0b2e3469dbf601dd29b6fb57dd1e36f8cb6be2f95db89965eeadaa3d6e9ec4f22c182e8a6864c2029f2698ba0724f6fc7598828bbad10d7f7c8f2216fedde3954fa4565a88297ab6a4151d366ee760df3b3793c139ee8e99cab9cff1b2'
     }
 };
 
@@ -961,13 +956,43 @@ function openCertificateModal(certificateId) {
     if (!currentCertificate) return;
     
     currentImageIndex = 0;
-    certificateImages = currentCertificate.images;
     
     // Set modal title
     document.getElementById('certificateModalTitle').textContent = currentCertificate.title;
     
-    // Populate images
-    populateCertificateImages();
+    // Check if it's a PDF or image certificate
+    if (currentCertificate.type === 'pdf') {
+        // Handle PDF certificates
+        const container = document.getElementById('certificateImages');
+        // Add #toolbar=0 to hide PDF toolbar
+        const pdfUrlWithParams = currentCertificate.pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0';
+        container.innerHTML = `
+            <div class="certificate-pdf text-center">
+                <div class="relative inline-block w-full">
+                    <iframe src="${pdfUrlWithParams}" 
+                            class="w-full h-[70vh] rounded-lg shadow-lg border border-gray-200 dark:border-gray-600"
+                            frameborder="0">
+                    </iframe>
+                    <div class="mt-4">
+                        <a href="${currentCertificate.pdfUrl}" target="_blank" 
+                           class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-external-link-alt mr-2"></i>
+                            Open PDF in New Tab
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Hide navigation buttons for PDF
+        document.getElementById('prevBtn').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('imageCounter').style.display = 'none';
+    } else {
+        // Handle image certificates
+        certificateImages = currentCertificate.images;
+        populateCertificateImages();
+    }
     
     // Show modal
     document.getElementById('certificateModal').classList.remove('hidden');
